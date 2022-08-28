@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Routes } from "@config/routes";
 import { NavigationContext } from "./navigation-context";
@@ -153,22 +153,45 @@ const CollapseMenuItem = styled(MenuItemButton)<{ isCollapsed: boolean }>`
   }
 `;
 
+const useIsDesktop = () => {
+  const [isDesktop, setDesktop] = useState(true);
+
+  const updateMedia = useCallback(() => {
+    setDesktop(window.innerWidth > 1023);
+  }, [setDesktop]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    updateMedia();
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
+  return isDesktop;
+};
+
 export function SidebarNavigation() {
   const router = useRouter();
   const { isSidebarCollapsed, toggleSidebar } = useContext(NavigationContext);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isDesktop = useIsDesktop();
+
+  const getImgSrc = (): string => {
+    const smallLogo = "/icons/logo-small.svg";
+    const largeLogo = "/icons/logo-large.svg";
+    if (!isDesktop) {
+      return largeLogo;
+    }
+    if (isSidebarCollapsed) {
+      return smallLogo;
+    }
+    return largeLogo;
+  };
+
   return (
     <Container isCollapsed={isSidebarCollapsed}>
       <FixedContainer>
         <Header>
-          <Logo
-            src={
-              isSidebarCollapsed
-                ? "/icons/logo-small.svg"
-                : "/icons/logo-large.svg"
-            }
-            alt="logo"
-          />
+          <Logo src={getImgSrc()} alt="logo" />
           <MenuButton onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
             <MenuIcon
               src={isMobileMenuOpen ? "/icons/close.svg" : "/icons/menu.svg"}
