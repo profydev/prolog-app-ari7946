@@ -153,8 +153,8 @@ const CollapseMenuItem = styled(MenuItemButton)<{ isCollapsed: boolean }>`
   }
 `;
 
-const useIsDesktop = () => {
-  const [isDesktop, setDesktop] = useState(true);
+const useIsDesktop = (): boolean => {
+  const [isDesktop, setDesktop] = useState<boolean>(true);
 
   const updateMedia = useCallback(() => {
     setDesktop(window.innerWidth > 1023);
