@@ -18,7 +18,6 @@ async function getProjects(): Promise<Project[]> {
   const updateStatus = (data: ResponseProject[]): Project[] => {
     return data?.map((project: any): Project => {
       if (project.status === ProjectStatus.error) {
-        // returns string
         project.status = ProjectStatus.critical;
       } else if (project.status === ProjectStatus.info) {
         project.status = ProjectStatus.stable;
