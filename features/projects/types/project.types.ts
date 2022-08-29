@@ -18,7 +18,7 @@ export type ResponseProject = {
   language: ProjectLanguage;
   numIssues: number;
   numEvents24h: number;
-  status: ProjectStatus;
+  status: Exclude<ProjectStatus, ProjectStatus.critical | ProjectStatus.stable>;
 };
 
 export type Project = {
