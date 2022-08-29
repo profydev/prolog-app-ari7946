@@ -15,7 +15,7 @@ async function getProjects(): Promise<Project[]> {
     "https://prolog-api.profy.dev/project"
   )) as GetProjectsResponse;
 
-  const updateStatus = (data: ResponseProject[]) => {
+  const updateStatus = (data: ResponseProject[]): Project[] => {
     return data?.map((project: any): Project => {
       if (project.status === ProjectStatus.error) {
         // returns string
