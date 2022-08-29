@@ -29,3 +29,12 @@ export type Project = {
   numEvents24h: number;
   status: Exclude<ProjectStatus, ProjectStatus.error | ProjectStatus.info>;
 };
+
+export type Project = {
+  id: string;
+  name: string;
+  language: ProjectLanguage;
+  numIssues: number;
+  numEvents24h: number;
+  status: Exclude<ProjectStatus, ProjectStatus.error | ProjectStatus.info>;
+};
