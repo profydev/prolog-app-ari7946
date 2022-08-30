@@ -54,7 +54,10 @@ export function IssueRow({ projectLanguage, issue }: IssueRowProps) {
   return (
     <Row>
       <IssueCell>
-        <LanguageIcon src={`/icons/${projectLanguage}.svg`} alt={projectLanguage} />
+        <LanguageIcon
+          src={`/icons/${projectLanguage}.svg`}
+          alt={projectLanguage}
+        />
         <div>
           <ErrorTypeAndMessage>
             <ErrorType>{name}:&nbsp;</ErrorType>

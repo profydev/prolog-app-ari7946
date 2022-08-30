@@ -1,13 +1,19 @@
 import { useQuery } from "react-query";
 import axios from "axios";
-import { Project, ProjectStatus, ResponseProject } from "../types/project.types";
+import {
+  Project,
+  ProjectStatus,
+  ResponseProject,
+} from "../types/project.types";
 
 type GetProjectsResponse = {
   data: ResponseProject[];
 };
 
 async function getProjects(): Promise<Project[]> {
-  const { data } = (await axios.get("https://prolog-api.profy.dev/project")) as GetProjectsResponse;
+  const { data } = (await axios.get(
+    "https://prolog-api.profy.dev/project"
+  )) as GetProjectsResponse;
 
   const updateStatus = (data: ResponseProject[]): Project[] => {
     return data?.map((project: any): Project => {
