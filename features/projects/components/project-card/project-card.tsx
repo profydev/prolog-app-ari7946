@@ -21,9 +21,15 @@ const languageNames = {
 };
 
 const statusColors = {
-  [ProjectStatus.stable]: BadgeColor.success,
+  [ProjectStatus.info]: BadgeColor.success,
   [ProjectStatus.warning]: BadgeColor.warning,
-  [ProjectStatus.critical]: BadgeColor.error,
+  [ProjectStatus.error]: BadgeColor.error,
+};
+
+const statusText = {
+  [ProjectStatus.info]: "stable",
+  [ProjectStatus.warning]: "warning",
+  [ProjectStatus.error]: "critical",
 };
 
 const Container = styled.div`
@@ -126,7 +132,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <IssuesNumber>{numEvents24h}</IssuesNumber>
           </Issues>
           <Status>
-            <Badge color={statusColors[status]}>{capitalize(status)}</Badge>
+            <Badge color={statusColors[status]}>
+              {capitalize(statusText[status])}
+            </Badge>
           </Status>
         </InfoContainer>
       </TopContainer>
