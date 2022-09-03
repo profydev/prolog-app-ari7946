@@ -28,7 +28,7 @@ const SpinnerOutline = styled.div`
 
 export function Spinner() {
   return (
-    <Container>
+    <Container className="spinner">
       <SpinnerOutline />
     </Container>
   );
