@@ -42,6 +42,7 @@ describe("Issue List", () => {
         .each(($el, index) => {
           const issue = mockIssues1.items[index];
           const firstLineOfStackTrace = issue.stack.split("\n")[1].trim();
+
           cy.wrap($el).contains(issue.name);
           cy.wrap($el).contains(issue.message);
           cy.wrap($el).contains(issue.numEvents);
@@ -79,6 +80,20 @@ describe("Issue List", () => {
 
       cy.reload();
       cy.contains("Page 2 of 3");
+    });
+
+    it.only("number of events and users should not be the same", () => {
+      cy.get("main")
+        .find("tbody")
+        .find("tr")
+        .each(($el, index) => {
+          const issue = mockIssues1.items[index];
+          cy.wrap($el).then(() => {
+            if (index < 4) {
+              expect(issue.numUsers).to.not.equal(issue.numEvents);
+            }
+          });
+        });
     });
   });
 });
