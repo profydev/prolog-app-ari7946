@@ -82,7 +82,7 @@ describe("Issue List", () => {
       cy.contains("Page 2 of 3");
     });
 
-    it.only("number of events and users should not be the same", () => {
+    it("number of events and users should not be the same", () => {
       cy.get("main")
         .find("tbody")
         .find("tr")
