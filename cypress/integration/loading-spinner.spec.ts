@@ -7,7 +7,7 @@ describe("Spinner", () => {
       // checks if loading spinner is visible before get request is resolved
       cy.get(".spinner").as("spinner").should("be.visible");
 
-      // wait 8 seconds
+      // wait 6 seconds
       cy.wait(6000);
 
       // spinner should not be visable after 6 seconds
