@@ -1,8 +1,8 @@
 import React from "react";
 import Head from "next/head";
 import styled from "styled-components";
-import { SidebarNavigation } from "@features/ui";
-import { color, displayFont, textFont, space, breakpoint } from "@styles/theme";
+import { SidebarNavigation, Footer } from "@features/ui";
+import { color, displayFont, space, breakpoint, textFont } from "@styles/theme";
 
 type PageContainerProps = {
   children: React.ReactNode;
@@ -22,18 +22,22 @@ const Container = styled.div`
 
 const Main = styled.main`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 const ContentContainer = styled.div`
   min-height: calc(
-    100vh - 2 * ${space(8)} - ${({ theme }) => theme.size.headerHeight}
+    100vh - 2 * ${space(10)} - ${({ theme }) => theme.size.headerHeight}
   );
   margin-top: ${({ theme }) => theme.size.headerHeight};
   padding: ${space(8, 3)};
   background: white;
+  flex-grow: 1;
 
   @media (min-width: ${breakpoint("desktop")}) {
-    min-height: calc(100vh - ${space(3)} - 2 * ${space(8)});
+    min-height: calc(100vh - ${space(24)} - 2 * ${space(8)});
     margin-top: ${space(3)};
     padding: ${space(8)};
     border-top-left-radius: ${space(10)};
@@ -68,6 +72,7 @@ export function PageContainer({ children, title, info }: PageContainerProps) {
           <Info>{info}</Info>
           {children}
         </ContentContainer>
+        <Footer />
       </Main>
     </Container>
   );
