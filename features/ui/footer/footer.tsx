@@ -33,7 +33,7 @@ const Version = styled.p`
   }
 `;
 
-const Nav = styled.nav`
+const Nav = styled.div`
   margin-right: ${space(16)};
   order: 1;
   margin: 0 auto;
