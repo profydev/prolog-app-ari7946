@@ -41,7 +41,6 @@ const Nav = styled.nav`
   @media (min-width: ${breakpoint("desktop")}) {
     order: 0;
     margin-right: 0;
-    margin: 0 auto;
   }
 `;
 
@@ -98,7 +97,7 @@ export function Footer() {
           </ListItem>
         </List>
       </Nav>
-      <FooterIcon src="/icons/logo-small.svg" alt="logo" />
+      <FooterIcon src="/icons/logo-small.svg" alt="Profy logo" />
     </Container>
   );
 }

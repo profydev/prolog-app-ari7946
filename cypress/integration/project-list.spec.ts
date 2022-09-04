@@ -39,5 +39,14 @@ describe("Project List", () => {
             .should("have.attr", "href", "/dashboard/issues");
         });
     });
+
+    it("verify that footer is present on page", () => {
+      cy.get("footer").find("a").contains("Docs").should("exist");
+      cy.get("footer").find("a").contains("API").should("exist");
+      cy.get("footer").find("a").contains("Help").should("exist");
+      cy.get("footer").find("a").contains("Community").should("exist");
+
+      cy.get("footer").find("img[alt='Profy logo']").should("exist");
+    });
   });
 });
