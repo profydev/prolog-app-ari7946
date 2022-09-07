@@ -46,7 +46,7 @@ export function ErrorMessage({ handleRefresh }: ErrorMessageProps) {
       <MessageContainer>
         <ErrorIcon src="/icons/error-icon.svg" />
         <p data-cy="project-error-message">
-          There was a problem whle loading the project data
+          There was a problem while loading the project data
         </p>
       </MessageContainer>
       <FetchDataContainer
