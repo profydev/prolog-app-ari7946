@@ -40,7 +40,6 @@ const Nav = styled.div`
 
   @media (min-width: ${breakpoint("desktop")}) {
     order: 0;
-    margin-right: 0;
   }
 `;
 
