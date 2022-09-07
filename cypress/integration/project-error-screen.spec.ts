@@ -17,7 +17,7 @@ describe("Project Error Screen", () => {
     cy.wait("@getProjectsFailed");
 
     cy.get("[data-cy='project-error-message']")
-      .contains("There was a problem whle loading the project data")
+      .contains("There was a problem while loading the project data")
       .should("exist");
 
     // waits 2 seconds to be able to see the component render
