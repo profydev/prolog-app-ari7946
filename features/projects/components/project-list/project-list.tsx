@@ -3,6 +3,8 @@ import { ProjectCard } from "../project-card";
 import { useProjects } from "../../api/use-projects";
 import { breakpoint, space } from "@styles/theme";
 import { Spinner } from "@features/ui/spinner/spinner";
+import { ErrorMessage } from "@features/projects";
+import { useState } from "react";
 
 const List = styled.ul`
   display: grid;
@@ -20,15 +22,17 @@ const List = styled.ul`
 `;
 
 export function ProjectList() {
-  const { data, isLoading, isError, error } = useProjects();
+  const { data, isLoading, isError, error, refetch } = useProjects();
+
+  const handleRefresh = () => refetch();
 
   if (isLoading) {
     return <Spinner />;
   }
 
   if (isError) {
-    console.error(error);
-    return <div>Error: {error.message}</div>;
+    console.log(error);
+    return <ErrorMessage handleRefresh={handleRefresh} />;
   }
 
   return (
