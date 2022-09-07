@@ -2,9 +2,8 @@ import styled from "styled-components";
 import { ProjectCard } from "../project-card";
 import { useProjects } from "../../api/use-projects";
 import { breakpoint, space } from "@styles/theme";
-import { Spinner } from "@features/ui/spinner/spinner";
+import { Spinner } from "@features/ui/spinner";
 import { ErrorMessage } from "@features/projects";
-import { useState } from "react";
 
 const List = styled.ul`
   display: grid;
