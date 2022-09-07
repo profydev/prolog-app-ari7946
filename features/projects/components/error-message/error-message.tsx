@@ -27,8 +27,6 @@ const MessageContainer = styled.div`
   display: flex;
 `;
 
-const ErrorText = styled.p``;
-
 const ErrorIcon = styled.img`
   display: block;
   width: ${space(5)};
@@ -47,13 +45,13 @@ export function ErrorMessage({ handleRefresh }: ErrorMessageProps) {
     <Container>
       <MessageContainer>
         <ErrorIcon src="/icons/error-icon.svg" />
-        <ErrorText>There was a problem whle loading the project data</ErrorText>
+        <p data-cy="project-error-message">
+          There was a problem whle loading the project data
+        </p>
       </MessageContainer>
       <FetchDataContainer
-        onClick={() => {
-          console.log("clicked");
-          handleRefresh();
-        }}
+        onClick={handleRefresh}
+        data-cy="project-error-refetch"
       >
         <p>Try again</p>
         <RightArrow src="/icons/error-arrow-right.svg" />
