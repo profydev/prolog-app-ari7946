@@ -68,22 +68,40 @@ const Container = styled(Button)<{
   width: fit-content;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: ${space(2)};
-  letter-spacing: 0.0375rem;
-  font-weight: 500;
-  font-size: 0.875rem;
+  letter-spacing: 0.0525rem;
+  color: #fff;
+  min-height: ${space(8)};
+  min-width: ${space(24)};
+  background-color: ${color("primary", 600)};
+  border: 1px;
+  ${textFont("sm", "regular")};
+  background-color: red;
 
   ${(props) => {
-    switch (props) {
-      default:
+    switch (props.size) {
+      case ButtonSize.sm:
         return css`
-          background-color: ${color("primary", 600)}; 
-          border: 1px;
-          ${"" /* background-color: red; */}
-          color: #fff;
+          padding-block: ${space(2)};
+          padding-inline: ${space(3)};
+        `;
+      case ButtonSize.md:
+        return css`
+          padding-block: calc(${space(2)} + 0.1rem);
+          padding-inline: calc(${space(3)} + 0.125rem);
+        `;
+      case ButtonSize.lg:
+        return css`
           padding-block: ${space(3)};
-          padding-inline: ${space(4)};
-          }
+          padding-inline: calc(${space(4)} + 0.075rem);
+          font-size: 16px;
+        `;
+      case ButtonSize.xl:
+        return css`
+          padding-block: calc(${space(3)} + 0.1rem);
+          padding-inline: calc(${space(4)} + 0.2rem);
+          font-size: 16px;
         `;
     }
   }}
