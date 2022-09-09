@@ -20,7 +20,7 @@ export default {
 const Template: ComponentStory<typeof ButtonContainer> = ({
   children = "Button CTA",
   size = ButtonSize.md,
-  color = ButtonColor.error,
+  color = ButtonColor.primary,
   state = ButtonState.default,
   icon = ButtonIcon.none,
 }: ButtonContainerProps) => (

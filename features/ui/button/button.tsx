@@ -32,14 +32,6 @@ export enum ButtonIcon {
   none = "none",
 }
 
-export type ButtonContainerProps = {
-  children?: ReactText | ReactElement | ReactNode;
-  size?: ButtonSize;
-  color?: ButtonColor;
-  state?: ButtonState;
-  icon?: ButtonIcon;
-};
-
 // This below Button variable is only here because there's at least one
 // instance where it is being used throughout the app
 export const Button = styled.button`
@@ -116,6 +108,9 @@ const Container = styled(Button)<{
           &:hover {
             background-color: ${color("primary", 700)};
           }
+          &:focus {
+            outline: 3px solid ${color("primary", 100)};
+          }
         `;
       case ButtonColor.secondary:
         return css`
@@ -123,6 +118,10 @@ const Container = styled(Button)<{
           background-color: ${color("primary", 50)};
           &:hover {
             background-color: ${color("primary", 100)};
+          }
+          &:focus {
+            outline: 3px solid ${color("primary", 100)};
+            background-color: ${color("primary", 50)};
           }
         `;
       case ButtonColor.gray:
@@ -134,6 +133,10 @@ const Container = styled(Button)<{
             color: ${color("gray", 800)};
             background-color: ${color("gray", 50)};
           }
+          &:focus {
+            outline: 3px solid ${color("gray", 100)};
+            background-color: rgba(255, 255, 255, 1);
+          }
         `;
       case ButtonColor.empty:
         return css`
@@ -142,6 +145,10 @@ const Container = styled(Button)<{
           background-color: rgba(0, 0, 0, 0);
           &:hover {
             background-color: ${color("primary", 50)};
+          }
+          &:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 1);
           }
         `;
       case ButtonColor.emptyGray:
@@ -152,6 +159,10 @@ const Container = styled(Button)<{
           &:hover {
             background-color: ${color("gray", 50)};
             color: ${color("gray", 600)};
+          }
+          &:focus {
+            outline: none;
+            background-color: rgba(0, 0, 0, 0);
           }
         `;
       case ButtonColor.error:
@@ -166,6 +177,14 @@ const Container = styled(Button)<{
     }
   }}
 `;
+
+export type ButtonContainerProps = {
+  children?: ReactText | ReactElement | ReactNode;
+  size?: ButtonSize;
+  color?: ButtonColor;
+  state?: ButtonState;
+  icon?: ButtonIcon;
+};
 
 export const ButtonContainer = ({
   children,
