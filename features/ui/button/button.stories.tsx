@@ -4,7 +4,6 @@ import {
   ButtonContainer,
   ButtonSize,
   ButtonColor,
-  ButtonState,
   ButtonIcon,
   ButtonContainerProps,
 } from "./button";
@@ -21,11 +20,10 @@ const Template: ComponentStory<typeof ButtonContainer> = ({
   children = "Button CTA",
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  state = ButtonState.default,
   icon = ButtonIcon.none,
 }: ButtonContainerProps) => (
   <div style={{ padding: 50 }}>
-    <ButtonContainer size={size} color={color} state={state} icon={icon}>
+    <ButtonContainer size={size} color={color} icon={icon}>
       {children}
     </ButtonContainer>
   </div>

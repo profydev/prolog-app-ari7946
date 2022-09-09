@@ -18,19 +18,21 @@ export enum ButtonColor {
   error = "error",
 }
 
-export enum ButtonState {
-  default = "default",
-  hover = "hover",
-  focused = "focused",
-  disabled = "disabled",
-}
-
 export enum ButtonIcon {
   leading = "leading",
   trailing = "trailing",
   only = "only",
   none = "none",
 }
+
+export const Icon = styled.img<{ icon: ButtonIcon }>`
+  display: block;
+  width: ${space(5)};
+  margin-left: ${(props) =>
+    props.icon == ButtonIcon.trailing ? ".5rem" : "none"};
+  margin-right: ${(props) =>
+    props.icon == ButtonIcon.leading ? ".5rem" : "none"};
+`;
 
 // This below Button variable is only here because there's at least one
 // instance where it is being used throughout the app
@@ -56,7 +58,6 @@ export const Button = styled.button`
 const Container = styled(Button)<{
   size: ButtonSize;
   color: ButtonColor;
-  state: ButtonState;
   icon: ButtonIcon;
 }>`
   width: fit-content;
@@ -67,11 +68,10 @@ const Container = styled(Button)<{
   letter-spacing: 0.0525rem;
   color: #fff;
   min-height: ${space(8)};
-  min-width: ${space(24)};
+  ${(props) => props.icon !== ButtonIcon.only && `min-width: ${space(24)}`};
   background-color: ${color("primary", 600)};
   border: 1px;
   ${textFont("sm", "regular")};
-  background-color: red;
 
   ${(props) => {
     switch (props.size) {
@@ -205,7 +205,6 @@ export type ButtonContainerProps = {
   children?: ReactText | ReactElement | ReactNode;
   size?: ButtonSize;
   color?: ButtonColor;
-  state?: ButtonState;
   icon?: ButtonIcon;
 };
 
@@ -213,12 +212,26 @@ export const ButtonContainer = ({
   children,
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  state = ButtonState.default,
   icon = ButtonIcon.none,
 }: ButtonContainerProps) => {
   return (
-    <Container size={size} color={color} state={state} icon={icon}>
-      {children}
+    <Container size={size} color={color} icon={icon}>
+      {icon === ButtonIcon.trailing && (
+        <>
+          {children}
+          <Icon src="/icons/button-icon.svg" icon={icon} />
+        </>
+      )}
+      {icon === ButtonIcon.leading && (
+        <>
+          <Icon src="/icons/button-icon.svg" icon={icon} />
+          {children}
+        </>
+      )}
+      {icon === ButtonIcon.only && (
+        <Icon src="/icons/button-icon.svg" icon={icon} />
+      )}
+      {icon === ButtonIcon.none && children}
     </Container>
   );
 };
