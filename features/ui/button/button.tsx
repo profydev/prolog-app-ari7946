@@ -1,6 +1,6 @@
 import React, { ReactText, ReactElement, ReactNode } from "react";
 import styled, { css } from "styled-components";
-import { color, textFont, space, displayFont } from "@styles/theme";
+import { color, textFont, space } from "@styles/theme";
 
 export enum ButtonSize {
   sm = "sm",
@@ -32,7 +32,7 @@ export enum ButtonIcon {
   none = "none",
 }
 
-type ButtonContainerProps = {
+export type ButtonContainerProps = {
   children?: ReactText | ReactElement | ReactNode;
   size?: ButtonSize;
   color?: ButtonColor;
@@ -40,6 +40,8 @@ type ButtonContainerProps = {
   icon?: ButtonIcon;
 };
 
+// This below Button variable is only here because there's at least one
+// instance where it is being used throughout the app
 export const Button = styled.button`
   cursor: pointer;
 
@@ -102,6 +104,64 @@ const Container = styled(Button)<{
           padding-block: calc(${space(3)} + 0.1rem);
           padding-inline: calc(${space(4)} + 0.2rem);
           font-size: 16px;
+        `;
+    }
+  }}
+
+  ${(props) => {
+    switch (props.color) {
+      case ButtonColor.primary:
+        return css`
+          background-color: ${color("primary", 600)};
+          &:hover {
+            background-color: ${color("primary", 700)};
+          }
+        `;
+      case ButtonColor.secondary:
+        return css`
+          color: ${color("primary", 700)};
+          background-color: ${color("primary", 50)};
+          &:hover {
+            background-color: ${color("primary", 100)};
+          }
+        `;
+      case ButtonColor.gray:
+        return css`
+          color: ${color("gray", 700)};
+          border: 1px solid ${color("gray", 300)};
+          background-color: rgba(255, 255, 255, 1);
+          &:hover {
+            color: ${color("gray", 800)};
+            background-color: ${color("gray", 50)};
+          }
+        `;
+      case ButtonColor.empty:
+        return css`
+          color: ${color("primary", 700)};
+          border: none;
+          background-color: rgba(0, 0, 0, 0);
+          &:hover {
+            background-color: ${color("primary", 50)};
+          }
+        `;
+      case ButtonColor.emptyGray:
+        return css`
+          color: ${color("gray", 500)};
+          border: none;
+          background-color: rgba(0, 0, 0, 0);
+          &:hover {
+            background-color: ${color("gray", 50)};
+            color: ${color("gray", 600)};
+          }
+        `;
+      case ButtonColor.error:
+        return css`
+          color: #ffffff;
+          border: 1px;
+          background-color: ${color("error", 600)};
+          &:hover {
+            background-color: ${color("error", 700)};
+          }
         `;
     }
   }}
