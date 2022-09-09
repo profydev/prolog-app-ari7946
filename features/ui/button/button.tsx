@@ -111,6 +111,9 @@ const Container = styled(Button)<{
           &:focus {
             outline: 3px solid ${color("primary", 100)};
           }
+          &:disabled {
+            background-color: ${color("primary", 200)};
+          }
         `;
       case ButtonColor.secondary:
         return css`
@@ -122,6 +125,10 @@ const Container = styled(Button)<{
           &:focus {
             outline: 3px solid ${color("primary", 100)};
             background-color: ${color("primary", 50)};
+          }
+          &:disabled {
+            background-color: ${color("primary", 25)};
+            color: ${color("primary", 300)};
           }
         `;
       case ButtonColor.gray:
@@ -137,6 +144,10 @@ const Container = styled(Button)<{
             outline: 3px solid ${color("gray", 100)};
             background-color: rgba(255, 255, 255, 1);
           }
+          &:disabled {
+            background-color: ${color("gray", 200)};
+            color: ${color("gray", 300)};
+          }
         `;
       case ButtonColor.empty:
         return css`
@@ -149,6 +160,9 @@ const Container = styled(Button)<{
           &:focus {
             outline: none;
             background-color: rgba(255, 255, 255, 1);
+          }
+          &:disabled {
+            color: ${color("gray", 300)};
           }
         `;
       case ButtonColor.emptyGray:
@@ -164,6 +178,9 @@ const Container = styled(Button)<{
             outline: none;
             background-color: rgba(0, 0, 0, 0);
           }
+          &:disabled {
+            color: ${color("gray", 300)};
+          }
         `;
       case ButtonColor.error:
         return css`
@@ -172,6 +189,12 @@ const Container = styled(Button)<{
           background-color: ${color("error", 600)};
           &:hover {
             background-color: ${color("error", 700)};
+          }
+          &:focus {
+            outline: 3px solid ${color("error", 100)};
+          }
+          &:disabled {
+            background-color: ${color("error", 200)};
           }
         `;
     }
