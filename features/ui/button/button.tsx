@@ -206,7 +206,7 @@ export type ButtonContainerProps = {
   size?: ButtonSize;
   color?: ButtonColor;
   icon?: ButtonIcon;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export const ButtonContainer = ({
