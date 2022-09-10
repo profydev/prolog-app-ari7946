@@ -145,7 +145,7 @@ const Container = styled(Button)<{
             background-color: rgba(255, 255, 255, 1);
           }
           &:disabled {
-            background-color: ${color("gray", 200)};
+            background-color: ${color("gray", 25)};
             color: ${color("gray", 300)};
           }
         `;
@@ -206,6 +206,7 @@ export type ButtonContainerProps = {
   size?: ButtonSize;
   color?: ButtonColor;
   icon?: ButtonIcon;
+  disabled?: boolean;
 };
 
 export const ButtonContainer = ({
@@ -213,9 +214,10 @@ export const ButtonContainer = ({
   size = ButtonSize.md,
   color = ButtonColor.primary,
   icon = ButtonIcon.none,
+  disabled = false,
 }: ButtonContainerProps) => {
   return (
-    <Container size={size} color={color} icon={icon}>
+    <Container size={size} color={color} icon={icon} disabled={disabled}>
       {icon === ButtonIcon.trailing && (
         <>
           {children}
