@@ -21,9 +21,10 @@ const Template: ComponentStory<typeof ButtonContainer> = ({
   size = ButtonSize.md,
   color = ButtonColor.primary,
   icon = ButtonIcon.none,
+  disabled = false,
 }: ButtonContainerProps) => (
   <div style={{ padding: 50 }}>
-    <ButtonContainer size={size} color={color} icon={icon}>
+    <ButtonContainer size={size} color={color} icon={icon} disabled={disabled}>
       {children}
     </ButtonContainer>
   </div>
