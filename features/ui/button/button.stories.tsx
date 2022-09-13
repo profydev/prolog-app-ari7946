@@ -1,32 +1,32 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import {
-  ButtonContainer,
+  Button,
   ButtonSize,
   ButtonColor,
   ButtonIcon,
-  ButtonContainerProps,
+  ButtonProps,
 } from "./button";
 
 export default {
-  title: "UI/ButtonContainer",
-  component: ButtonContainer,
+  title: "UI/Button",
+  component: Button,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof ButtonContainer>;
+} as ComponentMeta<typeof Button>;
 
-const Template: ComponentStory<typeof ButtonContainer> = ({
+const Template: ComponentStory<typeof Button> = ({
   children = "Button CTA",
   size = ButtonSize.md,
   color = ButtonColor.primary,
   icon = ButtonIcon.none,
-  disabled = false,
-}: ButtonContainerProps) => (
+  ...buttonProps
+}: ButtonProps) => (
   <div style={{ padding: 50 }}>
-    <ButtonContainer size={size} color={color} icon={icon} disabled={disabled}>
+    <Button size={size} color={color} icon={icon} {...buttonProps}>
       {children}
-    </ButtonContainer>
+    </Button>
   </div>
 );
 

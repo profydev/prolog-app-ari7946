@@ -1,4 +1,4 @@
-import React, { ReactText, ReactElement, ReactNode } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { color, textFont, space } from "@styles/theme";
 
@@ -36,30 +36,45 @@ export const Icon = styled.img<{ icon: ButtonIcon }>`
 
 // This below Button variable is only here because there's at least one
 // instance where it is being used throughout the app
-export const Button = styled.button`
-  cursor: pointer;
+// export const Button = styled.button`
+// cursor: pointer;
 
+/* remove default button styles */
+// border: none;
+// margin: 0;
+// padding: 0;
+// background: transparent;
+// line-height: normal;
+// -webkit-font-smoothing: inherit;
+// -moz-osx-font-smoothing: inherit;
+// -webkit-appearance: none;
+
+// &::-moz-focus-inner {
+//   border: 0;
+//   padding: 0;
+// }
+// `;
+
+const Container = styled.button<{
+  size: ButtonSize;
+  color: ButtonColor;
+  icon: ButtonIcon;
+}>`
+  cursor: pointer;
   /* remove default button styles */
   border: none;
   margin: 0;
   padding: 0;
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
   background: transparent;
   line-height: normal;
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
 
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-  }
-`;
-
-const Container = styled(Button)<{
-  size: ButtonSize;
-  color: ButtonColor;
-  icon: ButtonIcon;
-}>`
   width: fit-content;
   display: flex;
   align-items: center;
@@ -201,23 +216,21 @@ const Container = styled(Button)<{
   }}
 `;
 
-export type ButtonContainerProps = {
-  children?: ReactText | ReactElement | ReactNode;
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: ButtonSize;
   color?: ButtonColor;
   icon?: ButtonIcon;
-  disabled?: boolean;
 };
 
-export const ButtonContainer = ({
+export const Button = ({
   children,
   size = ButtonSize.md,
   color = ButtonColor.primary,
   icon = ButtonIcon.none,
-  disabled = false,
-}: ButtonContainerProps) => {
+  ...buttonProps
+}: ButtonProps) => {
   return (
-    <Container size={size} color={color} icon={icon} disabled={disabled}>
+    <Container size={size} color={color} icon={icon} {...buttonProps}>
       {icon === ButtonIcon.trailing && (
         <>
           {children}
