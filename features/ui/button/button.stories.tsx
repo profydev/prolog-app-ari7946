@@ -31,7 +31,13 @@ const Template: ComponentStory<typeof ButtonContainer> = ({
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  children: "Button CTA",
+  size: ButtonSize.md,
+  color: ButtonColor.primary,
+  icon: ButtonIcon.none,
+  disabled: false,
+};
 Default.parameters = {
   viewMode: "docs",
 };
