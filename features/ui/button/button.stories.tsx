@@ -4,7 +4,7 @@ import {
   Button,
   ButtonSize,
   ButtonColor,
-  ButtonIcon,
+  IconOptions,
   ButtonProps,
 } from "./button";
 
@@ -20,11 +20,16 @@ const Template: ComponentStory<typeof Button> = ({
   children = "Button CTA",
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  icon = ButtonIcon.none,
+  iconOptions = IconOptions.none,
   ...buttonProps
 }: ButtonProps) => (
   <div style={{ padding: 50 }}>
-    <Button size={size} color={color} icon={icon} {...buttonProps}>
+    <Button
+      size={size}
+      color={color}
+      iconOptions={iconOptions}
+      {...buttonProps}
+    >
       {children}
     </Button>
   </div>
@@ -35,7 +40,8 @@ Default.args = {
   children: "Button CTA",
   size: ButtonSize.md,
   color: ButtonColor.primary,
-  icon: ButtonIcon.none,
+  iconOptions: IconOptions.none,
+  iconSrc: "/icons/button-icon.svg",
   disabled: false,
 };
 Default.parameters = {

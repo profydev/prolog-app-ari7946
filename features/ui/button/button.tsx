@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, ImgHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { color, textFont, space } from "@styles/theme";
 
@@ -18,20 +18,21 @@ export enum ButtonColor {
   error = "error",
 }
 
-export enum ButtonIcon {
+export enum IconOptions {
   leading = "leading",
   trailing = "trailing",
   only = "only",
   none = "none",
 }
 
-export const Icon = styled.img<{ icon: ButtonIcon }>`
+export const Icon = styled.img<{ iconOptions: IconOptions }>`
   display: block;
-  width: ${space(5)};
+  min-width: ${(props) =>
+    props.iconOptions !== IconOptions.only ? "fit-content" : `${space(5)}`};
   margin-left: ${(props) =>
-    props.icon == ButtonIcon.trailing ? ".5rem" : "none"};
+    props.iconOptions === IconOptions.trailing ? ".5rem" : "none"};
   margin-right: ${(props) =>
-    props.icon == ButtonIcon.leading ? ".5rem" : "none"};
+    props.iconOptions === IconOptions.leading ? ".5rem" : "none"};
 `;
 
 // This below Button variable is only here because there's at least one
@@ -58,7 +59,7 @@ export const Icon = styled.img<{ icon: ButtonIcon }>`
 const Container = styled.button<{
   size: ButtonSize;
   color: ButtonColor;
-  icon: ButtonIcon;
+  iconOptions: IconOptions;
 }>`
   cursor: pointer;
   /* remove default button styles */
@@ -83,7 +84,8 @@ const Container = styled.button<{
   letter-spacing: 0.0525rem;
   color: #fff;
   min-height: ${space(8)};
-  ${(props) => props.icon !== ButtonIcon.only && `min-width: ${space(24)}`};
+  ${(props) =>
+    props.iconOptions !== IconOptions.only && `min-width: ${space(24)}`};
   background-color: ${color("primary", 600)};
   border: 1px;
   ${textFont("sm", "regular")};
@@ -219,34 +221,41 @@ const Container = styled.button<{
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: ButtonSize;
   color?: ButtonColor;
-  icon?: ButtonIcon;
+  iconOptions?: IconOptions;
+  iconSrc?: string;
 };
 
 export const Button = ({
   children,
+  iconSrc,
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  icon = ButtonIcon.none,
+  iconOptions = IconOptions.none,
   ...buttonProps
 }: ButtonProps) => {
   return (
-    <Container size={size} color={color} icon={icon} {...buttonProps}>
-      {icon === ButtonIcon.trailing && (
+    <Container
+      size={size}
+      color={color}
+      iconOptions={iconSrc ? iconOptions : IconOptions.none}
+      {...buttonProps}
+    >
+      {iconOptions === IconOptions.trailing && (
         <>
           {children}
-          <Icon src="/icons/button-icon.svg" icon={icon} />
+          {iconSrc && <Icon src={iconSrc} iconOptions={iconOptions} />}
         </>
       )}
-      {icon === ButtonIcon.leading && (
+      {iconOptions === IconOptions.leading && (
         <>
-          <Icon src="/icons/button-icon.svg" icon={icon} />
+          {iconSrc && <Icon src={iconSrc} iconOptions={iconOptions} />}
           {children}
         </>
       )}
-      {icon === ButtonIcon.only && (
-        <Icon src="/icons/button-icon.svg" icon={icon} />
+      {iconOptions === IconOptions.only && (
+        <Icon src={iconSrc} iconOptions={iconOptions} />
       )}
-      {icon === ButtonIcon.none && children}
+      {iconOptions === IconOptions.none && children}
     </Container>
   );
 };
