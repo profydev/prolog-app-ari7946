@@ -1,4 +1,4 @@
-import React, { ReactText, ReactElement, ReactNode } from "react";
+import React, { ButtonHTMLAttributes, ImgHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { color, textFont, space } from "@styles/theme";
 
@@ -18,48 +18,64 @@ export enum ButtonColor {
   error = "error",
 }
 
-export enum ButtonIcon {
+export enum IconOptions {
   leading = "leading",
   trailing = "trailing",
   only = "only",
   none = "none",
 }
 
-export const Icon = styled.img<{ icon: ButtonIcon }>`
+export const Icon = styled.img<{ iconOptions: IconOptions }>`
   display: block;
-  width: ${space(5)};
+  min-width: ${(props) =>
+    props.iconOptions !== IconOptions.only ? "fit-content" : `${space(5)}`};
   margin-left: ${(props) =>
-    props.icon == ButtonIcon.trailing ? ".5rem" : "none"};
+    props.iconOptions === IconOptions.trailing ? ".5rem" : "none"};
   margin-right: ${(props) =>
-    props.icon == ButtonIcon.leading ? ".5rem" : "none"};
+    props.iconOptions === IconOptions.leading ? ".5rem" : "none"};
 `;
 
 // This below Button variable is only here because there's at least one
 // instance where it is being used throughout the app
-export const Button = styled.button`
-  cursor: pointer;
+// export const Button = styled.button`
+// cursor: pointer;
 
+/* remove default button styles */
+// border: none;
+// margin: 0;
+// padding: 0;
+// background: transparent;
+// line-height: normal;
+// -webkit-font-smoothing: inherit;
+// -moz-osx-font-smoothing: inherit;
+// -webkit-appearance: none;
+
+// &::-moz-focus-inner {
+//   border: 0;
+//   padding: 0;
+// }
+// `;
+
+const Container = styled.button<{
+  size: ButtonSize;
+  color: ButtonColor;
+  iconOptions: IconOptions;
+}>`
+  cursor: pointer;
   /* remove default button styles */
   border: none;
   margin: 0;
   padding: 0;
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
   background: transparent;
   line-height: normal;
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
 
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-  }
-`;
-
-const Container = styled(Button)<{
-  size: ButtonSize;
-  color: ButtonColor;
-  icon: ButtonIcon;
-}>`
   width: fit-content;
   display: flex;
   align-items: center;
@@ -68,7 +84,8 @@ const Container = styled(Button)<{
   letter-spacing: 0.0525rem;
   color: #fff;
   min-height: ${space(8)};
-  ${(props) => props.icon !== ButtonIcon.only && `min-width: ${space(24)}`};
+  ${(props) =>
+    props.iconOptions !== IconOptions.only && `min-width: ${space(24)}`};
   background-color: ${color("primary", 600)};
   border: 1px;
   ${textFont("sm", "regular")};
@@ -201,39 +218,44 @@ const Container = styled(Button)<{
   }}
 `;
 
-export type ButtonContainerProps = {
-  children?: ReactText | ReactElement | ReactNode;
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: ButtonSize;
   color?: ButtonColor;
-  icon?: ButtonIcon;
-  disabled?: boolean;
+  iconOptions?: IconOptions;
+  iconSrc?: string;
 };
 
-export const ButtonContainer = ({
+export const Button = ({
   children,
+  iconSrc,
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  icon = ButtonIcon.none,
-  disabled = false,
-}: ButtonContainerProps) => {
+  iconOptions = IconOptions.none,
+  ...buttonProps
+}: ButtonProps) => {
   return (
-    <Container size={size} color={color} icon={icon} disabled={disabled}>
-      {icon === ButtonIcon.trailing && (
+    <Container
+      size={size}
+      color={color}
+      iconOptions={iconSrc ? iconOptions : IconOptions.none}
+      {...buttonProps}
+    >
+      {iconOptions === IconOptions.trailing && (
         <>
           {children}
-          <Icon src="/icons/button-icon.svg" icon={icon} />
+          {iconSrc && <Icon src={iconSrc} iconOptions={iconOptions} />}
         </>
       )}
-      {icon === ButtonIcon.leading && (
+      {iconOptions === IconOptions.leading && (
         <>
-          <Icon src="/icons/button-icon.svg" icon={icon} />
+          {iconSrc && <Icon src={iconSrc} iconOptions={iconOptions} />}
           {children}
         </>
       )}
-      {icon === ButtonIcon.only && (
-        <Icon src="/icons/button-icon.svg" icon={icon} />
+      {iconOptions === IconOptions.only && (
+        <Icon src={iconSrc} iconOptions={iconOptions} />
       )}
-      {icon === ButtonIcon.none && children}
+      {iconOptions === IconOptions.none && children}
     </Container>
   );
 };

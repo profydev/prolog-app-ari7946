@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@features/ui";
 import { ListItem, Anchor, Icon } from "./menu-item-link";
+import styled from "styled-components";
 
 type MenuItemProps = {
   className?: string;
@@ -9,6 +9,23 @@ type MenuItemProps = {
   onClick: () => void;
   isCollapsed: boolean;
 };
+
+const Button = styled.button`
+  /* remove default button styles */
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+`;
 
 export function MenuItemButton({
   className,
