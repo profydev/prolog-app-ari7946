@@ -5,7 +5,6 @@ import { Routes } from "@config/routes";
 import { NavigationContext } from "./navigation-context";
 import { MenuItemButton } from "./menu-item-button";
 import { MenuItemLink } from "./menu-item-link";
-import { Button } from "@features/ui";
 import { breakpoint, color, space, zIndex } from "@styles/theme";
 
 const menuItems = [
@@ -76,7 +75,23 @@ const Logo = styled.img`
   }
 `;
 
-const MenuButton = styled(Button)`
+const MenuButton = styled.button`
+  cursor: pointer;
+
+  /* remove default button styles */
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
   @media (min-width: ${breakpoint("desktop")}) {
     display: none;
   }
