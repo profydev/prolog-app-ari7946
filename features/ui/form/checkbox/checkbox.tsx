@@ -32,20 +32,15 @@ const Input = styled.input<any>`
   outline: none;
   cursor: pointer;
 
-  /* Checked */
-  ${(props) => {
-    return (
-      props.checked &&
-      css`
-        background-color: ${color("primary", 50)};
-      `
-    );
-  }}
   /* Not Checked */
   &:not(:checked) {
     content: "";
   }
 
+  /* Checked */
+  &:checked {
+    background-color: ${color("primary", 50)};
+  }
   &:checked::before {
     display: flex;
     align-items: center;
@@ -83,7 +78,6 @@ const Input = styled.input<any>`
     border-color: ${color("gray", 200)};
     background-color: ${color("gray", 100)};
   }
-
   &:disabled:not(:checked) + label,
   &:disabled:checked + label {
     color: ${color("gray", 300)};
