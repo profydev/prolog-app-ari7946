@@ -1,37 +1,49 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import {
-  ButtonContainer,
+  Button,
   ButtonSize,
   ButtonColor,
-  ButtonIcon,
-  ButtonContainerProps,
+  IconOptions,
+  ButtonProps,
 } from "./button";
 
 export default {
-  title: "UI/ButtonContainer",
-  component: ButtonContainer,
+  title: "UI/Button",
+  component: Button,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof ButtonContainer>;
+} as ComponentMeta<typeof Button>;
 
-const Template: ComponentStory<typeof ButtonContainer> = ({
+const Template: ComponentStory<typeof Button> = ({
   children = "Button CTA",
   size = ButtonSize.md,
   color = ButtonColor.primary,
-  icon = ButtonIcon.none,
-  disabled = false,
-}: ButtonContainerProps) => (
+  iconOptions = IconOptions.none,
+  ...buttonProps
+}: ButtonProps) => (
   <div style={{ padding: 50 }}>
-    <ButtonContainer size={size} color={color} icon={icon} disabled={disabled}>
+    <Button
+      size={size}
+      color={color}
+      iconOptions={iconOptions}
+      {...buttonProps}
+    >
       {children}
-    </ButtonContainer>
+    </Button>
   </div>
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  children: "Button CTA",
+  size: ButtonSize.md,
+  color: ButtonColor.primary,
+  iconOptions: IconOptions.none,
+  iconSrc: "/icons/button-icon.svg",
+  disabled: false,
+};
 Default.parameters = {
   viewMode: "docs",
 };
