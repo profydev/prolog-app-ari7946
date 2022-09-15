@@ -10,27 +10,20 @@ export default {
   },
 } as ComponentMeta<typeof CheckBox>;
 
-const Template: ComponentStory<typeof CheckBox> = ({
-  label = "Label",
-  checkboxSize = "sm",
-  checkPartly = false,
-  disabled = false,
-}) => {
-  const [checked, setChecked] = useState<boolean>(false);
+const Template: ComponentStory<typeof CheckBox> = (props) => {
+  const [isCheckedA, setIsCheckedA] = useState<boolean>(false);
 
-  const handleChecked = () => {
-    setChecked(!checked);
+  const handleChangeA = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsCheckedA(e.target.checked);
   };
 
   return (
     <div style={{ padding: 50 }}>
       <CheckBox
-        label={label}
-        checked={checked}
-        checkboxSize={checkboxSize}
-        handleChange={handleChecked}
-        checkPartly={checkPartly}
-        disabled={disabled}
+        {...props}
+        checked={isCheckedA}
+        handleChange={handleChangeA}
+        label="Label"
       />
     </div>
   );
@@ -42,6 +35,7 @@ Default.args = {
   checkboxSize: "sm",
   checkPartly: false,
   disabled: false,
+  displayLabel: true,
 };
 Default.parameters = {
   viewMode: "docs",
