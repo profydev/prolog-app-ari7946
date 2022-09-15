@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, ImgHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { color, textFont, space } from "@styles/theme";
 
@@ -34,27 +34,6 @@ export const Icon = styled.img<{ iconOptions: IconOptions }>`
   margin-right: ${(props) =>
     props.iconOptions === IconOptions.leading ? ".5rem" : "none"};
 `;
-
-// This below Button variable is only here because there's at least one
-// instance where it is being used throughout the app
-// export const Button = styled.button`
-// cursor: pointer;
-
-/* remove default button styles */
-// border: none;
-// margin: 0;
-// padding: 0;
-// background: transparent;
-// line-height: normal;
-// -webkit-font-smoothing: inherit;
-// -moz-osx-font-smoothing: inherit;
-// -webkit-appearance: none;
-
-// &::-moz-focus-inner {
-//   border: 0;
-//   padding: 0;
-// }
-// `;
 
 const Container = styled.button<{
   size: ButtonSize;
