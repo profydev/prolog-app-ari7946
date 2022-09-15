@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { ProjectCard } from "../project-card";
 import { useProjects } from "../../api/use-projects";
 import { breakpoint, space } from "@styles/theme";
+import { Spinner } from "@features/ui/spinner";
+import { ErrorMessage } from "@features/projects";
 
 const List = styled.ul`
   display: grid;
@@ -19,15 +21,17 @@ const List = styled.ul`
 `;
 
 export function ProjectList() {
-  const { data, isLoading, isError, error } = useProjects();
+  const { data, isLoading, isError, error, refetch } = useProjects();
+
+  const handleRefresh = () => refetch();
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <Spinner />;
   }
 
   if (isError) {
-    console.error(error);
-    return <div>Error: {error.message}</div>;
+    console.log(error);
+    return <ErrorMessage handleRefresh={handleRefresh} />;
   }
 
   return (
