@@ -10,7 +10,7 @@ export default {
   },
 } as ComponentMeta<typeof CheckBox>;
 
-const Template: ComponentStory<typeof CheckBox> = (...props) => {
+const Template: ComponentStory<typeof CheckBox> = (props) => {
   const [isCheckedA, setIsCheckedA] = useState<boolean>(false);
 
   const handleChangeA = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,8 +20,8 @@ const Template: ComponentStory<typeof CheckBox> = (...props) => {
   return (
     <div style={{ padding: 50 }}>
       <CheckBox
-        checked={isCheckedA}
         {...props}
+        checked={isCheckedA}
         handleChange={handleChangeA}
         label="Label"
       />

@@ -124,8 +124,9 @@ export const CheckBox = ({
   ...props
 }: CheckboxProps) => {
   return (
-    <Container {...props}>
+    <Container>
       <Input
+        {...props}
         type="checkbox"
         onChange={handleChange}
         checked={checked}
@@ -133,9 +134,9 @@ export const CheckBox = ({
         checkboxSize={checkboxSize}
         checkPartly={checkPartly}
         disabled={disabled}
-        {...props}
       />
       <Label
+        {...props}
         htmlFor={label}
         checked={checked}
         checkboxSize={checkboxSize}
