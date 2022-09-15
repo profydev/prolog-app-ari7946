@@ -50,6 +50,11 @@ const Input = styled.input<any>`
   outline: none;
   cursor: pointer;
 
+  /* Hover */
+  &:hover {
+    background-color: ${color("primary", 50)};
+  }
+
   /* Not Checked */
   &:not(:checked) {
     content: "";
