@@ -84,7 +84,7 @@ const Input = styled.input<any>`
     border-color: ${color("gray", 200)};
     background-color: ${color("gray", 100)};
   }
-  &:disabled:not(:checked) + label, &:disabled:checked + label} {
+  &:disabled:not(:checked) + label, &:disabled:checked + label {
     color: ${color("gray", 300)};
   }
 `;
