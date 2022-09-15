@@ -1,6 +1,24 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { color, textFont } from "@styles/theme";
+
+// utility function
+const getContentWhenChecked = (
+  checkboxSize: "sm" | "md",
+  checkPartly: boolean
+): string => {
+  if (checkboxSize === "md" && checkPartly) {
+    return "url('icons/select-minus-md.svg')";
+  } else if (checkboxSize === "md" && !checkPartly) {
+    return "url('icons/select-checked-md.svg')";
+  } else if (checkboxSize === "sm" && checkPartly) {
+    return "url('icons/select-minus-sm.svg')";
+  } else if (checkboxSize === "sm" && !checkPartly) {
+    return "url('icons/select-checked-sm.svg')";
+  } else {
+    return "url('icons/select-minus-md.svg')";
+  }
+};
 
 const Container = styled.div`
   display: flex;
@@ -32,41 +50,24 @@ const Input = styled.input<any>`
   outline: none;
   cursor: pointer;
 
-  /* Checked */
-  ${(props) => {
-    return (
-      props.checked &&
-      css`
-        background-color: ${color("primary", 50)};
-      `
-    );
-  }}
   /* Not Checked */
   &:not(:checked) {
     content: "";
   }
 
+  /* Checked */
+  &:checked {
+    background-color: ${color("primary", 50)};
+  }
   &:checked::before {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-inline: auto;
-    content: ${(props) => {
-      if (props.checkboxSize === "md" && props.checkPartly) {
-        return "url('icons/select-minus-md.svg')";
-      } else if (props.checkboxSize === "md" && !props.checkPartly) {
-        return "url('icons/select-checked-md.svg')";
-      } else if (props.checkboxSize === "sm" && props.checkPartly) {
-        return "url('icons/select-minus-sm.svg')";
-      } else if (props.checkboxSize === "sm" && !props.checkPartly) {
-        return "url('icons/select-checked-sm.svg')";
-      } else {
-        return "url('icons/select-minus-md.svg')";
-      }
-    }};
-    padding-bottom: ${(props) => {
-      return props.checkPartly ? `0.5rem;` : `0.15rem;`;
-    }};
+    content: ${(props) =>
+      getContentWhenChecked(props.checkboxSize, props.checkPartly)};
+    padding-bottom: ${(props) => (props.checkPartly ? `0.5rem` : `0.15rem`)};
+    };
   }
 
   /* Focus for accessability */
@@ -83,14 +84,13 @@ const Input = styled.input<any>`
     border-color: ${color("gray", 200)};
     background-color: ${color("gray", 100)};
   }
-
-  &:disabled:not(:checked) + label,
-  &:disabled:checked + label {
+  &:disabled:not(:checked) + label, &:disabled:checked + label {
     color: ${color("gray", 300)};
   }
 `;
 
 const Label = styled.label<any>`
+  display: ${(props) => (props.displayLabel ? "inherit" : "none")};
   color: ${color("gray", 700)};
   ${textFont("sm", "regular")};
   ${(props) => {
@@ -103,39 +103,45 @@ const Label = styled.label<any>`
   }}
 `;
 
-export type CheckboxProps = {
+export type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
   checked: boolean;
-  handleChange: () => void;
-  label?: string | null;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  displayLabel?: boolean;
   checkboxSize?: "sm" | "md";
   checkPartly?: boolean;
   disabled?: boolean;
 };
 
 export const CheckBox = ({
-  label = null,
+  label,
+  handleChange,
+  displayLabel = true,
   checked = false,
   checkboxSize = "md",
-  handleChange,
   checkPartly = false,
   disabled = false,
+  ...props
 }: CheckboxProps) => {
   return (
     <Container>
       <Input
+        {...props}
         type="checkbox"
         onChange={handleChange}
         checked={checked}
-        id="label"
+        id={label}
         checkboxSize={checkboxSize}
         checkPartly={checkPartly}
         disabled={disabled}
       />
       <Label
-        htmlFor="label"
+        {...props}
+        htmlFor={label}
         checked={checked}
         checkboxSize={checkboxSize}
         disabled={disabled}
+        displayLabel={displayLabel}
       >
         {label}
       </Label>
