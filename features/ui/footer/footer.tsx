@@ -3,9 +3,13 @@ import styled from "styled-components";
 import { color, space, breakpoint, textFont } from "@styles/theme";
 import Link from "next/link";
 
+type FooterProps = {
+  appVersion?: string;
+};
+
 const Container = styled.footer`
   background-color: ${color("gray", 50)};
-  height: 11rem;
+  height: calc(${space(20)} + ${space(24)});
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -52,7 +56,7 @@ const List = styled.ul`
   width: 100%;
 
   @media (min-width: ${breakpoint("desktop")}) {
-    width: 18rem;
+    width: calc(${space(24)} * 3);
   }
 `;
 
@@ -63,7 +67,8 @@ const ListItem = styled(Link)`
 const Anchor = styled.a`
   display: inline-block;
   color: ${color("gray", 500)};
-  font: ${textFont("sm", "regular")};
+  ${textFont("md", "regular")};
+  text-decoration: none;
 `;
 
 const FooterIcon = styled.img`
@@ -76,22 +81,22 @@ const FooterIcon = styled.img`
   }
 `;
 
-export function Footer() {
+export function Footer({ appVersion = "14.5.1" }: FooterProps) {
   return (
     <Container>
-      <Version>Version: 14.5.1</Version>
+      <Version>Version: {appVersion}</Version>
       <Nav>
         <List>
-          <ListItem href="/dashboard">
+          <ListItem href="/dashboard" passHref>
             <Anchor>Docs</Anchor>
           </ListItem>
-          <ListItem href="/dashboard">
+          <ListItem href="/dashboard" passHref>
             <Anchor>API</Anchor>
           </ListItem>
-          <ListItem href="/dashboard">
+          <ListItem href="/dashboard" passHref>
             <Anchor>Help</Anchor>
           </ListItem>
-          <ListItem href="/dashboard">
+          <ListItem href="/dashboard" passHref>
             <Anchor>Community</Anchor>
           </ListItem>
         </List>
