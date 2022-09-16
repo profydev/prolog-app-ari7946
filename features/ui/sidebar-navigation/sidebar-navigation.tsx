@@ -5,7 +5,6 @@ import { Routes } from "@config/routes";
 import { NavigationContext } from "./navigation-context";
 import { MenuItemButton } from "./menu-item-button";
 import { MenuItemLink } from "./menu-item-link";
-import { Button } from "@features/ui";
 import { breakpoint, color, space, zIndex } from "@styles/theme";
 
 const menuItems = [
@@ -76,7 +75,23 @@ const Logo = styled.img`
   }
 `;
 
-const MenuButton = styled(Button)`
+const MenuButton = styled.button`
+  cursor: pointer;
+
+  /* remove default button styles */
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
   @media (min-width: ${breakpoint("desktop")}) {
     display: none;
   }
@@ -155,7 +170,6 @@ const CollapseMenuItem = styled(MenuItemButton)<{ isCollapsed: boolean }>`
 
 const useIsDesktop = (): boolean => {
   const [isDesktop, setDesktop] = useState<boolean>(true);
-
   const updateMedia = useCallback(() => {
     setDesktop(window.innerWidth > 1023);
   }, [setDesktop]);
@@ -169,29 +183,28 @@ const useIsDesktop = (): boolean => {
   return isDesktop;
 };
 
+const getIconSrc = (
+  isDesktop: boolean,
+  isSidebarCollapsed: boolean
+): string => {
+  const smallLogo = "/icons/logo-small.svg";
+  const largeLogo = "/icons/logo-large.svg";
+  if (!isDesktop) return largeLogo;
+  if (isSidebarCollapsed) return smallLogo;
+  return largeLogo;
+};
+
 export function SidebarNavigation() {
   const router = useRouter();
   const { isSidebarCollapsed, toggleSidebar } = useContext(NavigationContext);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isDesktop = useIsDesktop();
 
-  const getImgSrc = (): string => {
-    const smallLogo = "/icons/logo-small.svg";
-    const largeLogo = "/icons/logo-large.svg";
-    if (!isDesktop) {
-      return largeLogo;
-    }
-    if (isSidebarCollapsed) {
-      return smallLogo;
-    }
-    return largeLogo;
-  };
-
   return (
     <Container isCollapsed={isSidebarCollapsed}>
       <FixedContainer>
         <Header>
-          <Logo src={getImgSrc()} alt="logo" />
+          <Logo src={getIconSrc(isDesktop, isSidebarCollapsed)} alt="logo" />
           <MenuButton onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
             <MenuIcon
               src={isMobileMenuOpen ? "/icons/close.svg" : "/icons/menu.svg"}
