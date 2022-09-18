@@ -3,26 +3,28 @@ import { color, space } from "@styles/theme";
 
 const Container = styled.div`
   width: 100%;
-  height: 25vh;
+  margin-top: calc(${space(20)} + ${space(10)});
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const spin = keyframes`
+  from {
+    transform: rotate(0);
+  }
   to {
-    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 `;
 
 const SpinnerOutline = styled.div`
-  width: ${space(10)};
-  height: ${space(10)};
-  border: 6px solid ${color("primary", 50)};
+  width: ${space(16)};
+  height: ${space(16)};
+  border: ${space(2)} solid ${color("primary", 50)};
   border-radius: 50%;
-  border-top-color: ${color("primary", 500)};
+  border-right-color: ${color("primary", 600)};
   animation: ${spin} 0.2s ease-in-out infinite;
-  -webkit-animation: ${spin} 0.4s ease-in-out infinite;
   margin: 0 auto;
 `;
 
