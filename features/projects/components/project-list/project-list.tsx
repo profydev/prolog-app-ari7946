@@ -23,15 +23,13 @@ const List = styled.ul`
 export function ProjectList() {
   const { data, isLoading, isError, error, refetch } = useProjects();
 
-  const handleRefresh = () => refetch();
-
   if (isLoading) {
     return <Spinner />;
   }
 
   if (isError) {
     console.log(error);
-    return <ErrorMessage handleRefresh={handleRefresh} />;
+    return <ErrorMessage refetch={refetch} />;
   }
 
   return (
