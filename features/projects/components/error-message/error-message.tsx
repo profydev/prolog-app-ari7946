@@ -3,7 +3,7 @@ import { space, color, textFont } from "@styles/theme";
 import styled from "styled-components";
 
 type ErrorMessageProps = {
-  handleRefresh: () => void;
+  refetch: () => void;
 };
 
 const Container = styled.div`
@@ -40,7 +40,7 @@ const RightArrow = styled.img`
   padding-inline: ${space(2)};
 `;
 
-export function ErrorMessage({ handleRefresh }: ErrorMessageProps) {
+export function ErrorMessage({ refetch }: ErrorMessageProps) {
   return (
     <Container>
       <MessageContainer>
@@ -50,7 +50,7 @@ export function ErrorMessage({ handleRefresh }: ErrorMessageProps) {
         </p>
       </MessageContainer>
       <FetchDataContainer
-        onClick={handleRefresh}
+        onClick={() => refetch()}
         data-cy="project-error-refetch"
       >
         <p>Try again</p>
