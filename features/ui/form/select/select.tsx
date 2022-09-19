@@ -12,31 +12,47 @@ type SelectProps = {
 const Container = styled.div``;
 
 const List = styled.ul<{ showDropdown: boolean }>`
-  display: inline-block;
+  display: block;
   width: calc(${space(20)} * 4);
   margin: 0;
   padding: 0;
-  border: 1px solid red;
-  ${textFont("md", "regular")};
+  box-shadow: 0 7px 12px -6px ${color("gray", 300)};
+  border-radius: 7px;
+  /* border: 1px solid red; */
+  /* ${textFont("md", "regular")}; */
   ${({ showDropdown }) =>
     showDropdown
       ? css`
           opacity: 1;
           visibility: visible;
+          position: relative;
+          z-index: 100;
         `
       : css`
           opacity: 0;
           visibility: hidden;
-        `}
+        `};
 `;
 
-const SelectedOption = styled.div`
-  border: 1px solid red;
-  width: calc(${space(20)} * 4);
-  padding: ${space(3)};
-  border-radius: 5px;
-  color: ${color("gray", 500)};
+const SelectedOption = styled.div<{ selectedOption: string }>`
+  border: 1px solid ${color("gray", 300)};
+  border-radius: 7px;
+  width: calc(${space(20)} * 4 - ${space(6)});
+  padding: ${space(2, 3)};
+  color: ${({ selectedOption }) =>
+    selectedOption ? color("gray", 900) : color("gray", 500)};
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  ${textFont("md", "regular")};
+`;
+
+const SelectIcon = styled.img<{
+  showDropdown: boolean;
+}>`
+  transform: ${({ showDropdown }) =>
+    showDropdown ? "rotate(180deg)" : "none"};
+  padding-inline: ${space(2)};
 `;
 
 export function Select({
@@ -59,8 +75,16 @@ export function Select({
       value={{ selectedOption, changeSelectedOption: updateSelectedOption }}
     >
       <Container>
-        <SelectedOption onClick={showDropdownHandler}>
+        <SelectedOption
+          // showDropdown={showDropdown}
+          onClick={showDropdownHandler}
+          selectedOption={selectedOption}
+        >
           {selectedOption || placeholder}
+          <SelectIcon
+            src="./icons/select-icon.svg"
+            showDropdown={showDropdown}
+          />
         </SelectedOption>
         <List showDropdown={showDropdown}>{children}</List>
       </Container>
