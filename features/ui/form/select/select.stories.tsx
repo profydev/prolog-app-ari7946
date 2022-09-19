@@ -23,7 +23,7 @@ const selectData = [
 const Template: ComponentStory<typeof Select> = (props) => {
   return (
     <div style={{ padding: 50 }}>
-      <Select placeholder="Select team member">
+      <Select {...props}>
         {selectData.map((name) => (
           <Option key={name} value={name}>
             {name}
@@ -34,7 +34,10 @@ const Template: ComponentStory<typeof Select> = (props) => {
   );
 };
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  disabled: false,
+  placeholder: "Select team member",
+};
 Default.parameters = {
   viewMode: "docs",
 };

@@ -19,7 +19,9 @@ const ListItem = styled.li<{ isCurrentlySelected: boolean }>`
   padding-block: calc(${space(3)} - 0.1rem);
   ${textFont("md", "regular")};
   cursor: pointer;
+  z-index: 100;
   color: ${color("gray", 800)};
+
   ${({ isCurrentlySelected }) =>
     isCurrentlySelected &&
     css`
