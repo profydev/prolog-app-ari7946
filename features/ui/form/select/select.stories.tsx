@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Select } from "./select";
-import { Option } from "./option";
+import { Select, Option } from "./";
 
 export default {
   title: "UI/Select",
@@ -11,14 +10,25 @@ export default {
   },
 } as ComponentMeta<typeof Select>;
 
+const selectData = [
+  "Phoenix Baker",
+  "Olivia Rhye",
+  "Lana Steiner",
+  "Demi Wilkinson",
+  "Candice Wu",
+  "Natali Craig",
+  "Drew Cano",
+];
+
 const Template: ComponentStory<typeof Select> = (props) => {
   return (
     <div style={{ padding: 50 }}>
-      <Select>
-        <Option value="one">One</Option>
-        <Option value="two">Two</Option>
-        <Option value="three">Three</Option>
-        <Option value="four">Four</Option>
+      <Select placeholder="Select team member">
+        {selectData.map((name) => (
+          <Option key={name} value={name}>
+            {name}
+          </Option>
+        ))}
       </Select>
     </div>
   );
