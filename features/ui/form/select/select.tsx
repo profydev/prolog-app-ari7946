@@ -1,5 +1,12 @@
-import React, { useState, ReactNode } from "react";
+import React, {
+  useState,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import styled, { css } from "styled-components";
+import { useClickAway } from "react-use";
 import { SelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
 
@@ -14,14 +21,16 @@ type SelectProps = {
   hint?: string;
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: relative;
+`;
 
 const List = styled.ul<{ showDropdown: boolean }>`
   display: block;
   width: calc(${space(20)} * 4);
-  position: absolute;
   margin: 0;
   padding: 0;
+  position: absolute;
   box-shadow: 0 7px 12px -6px ${color("gray", 300)};
   border-radius: 7px;
   ${({ showDropdown }) =>
@@ -29,7 +38,8 @@ const List = styled.ul<{ showDropdown: boolean }>`
       ? css`
           opacity: 1;
           visibility: visible;
-          position: relative;
+          position: absolute;
+          height: auto;
           z-index: 200;
         `
       : css`
@@ -40,6 +50,7 @@ const List = styled.ul<{ showDropdown: boolean }>`
 
 const SelectedOption = styled.div.attrs(() => ({
   tabIndex: 0,
+  ariaHasPopup: "listbox",
 }))<any>`
   border: 1px solid;
   border-color: ${({ disabled, errorMessage }) =>
@@ -75,7 +86,7 @@ const SelectArrowIcon = styled.img<{
 }>`
   transform: ${({ showDropdown }) =>
     showDropdown ? "rotate(180deg)" : "none"};
-  padding-inline: ${space(3)};
+  margin-inline: ${space(1)};
 `;
 
 const OptionalIcon = styled.img`
@@ -122,25 +133,38 @@ export function Select({
 }: SelectProps) {
   const [selectedOption, setSelectedOption] = useState(defaultValue || "");
   const [showDropdown, setShowDropdown] = useState(false);
+  const ref = useRef(null);
 
-  const showDropdownHandler = () => setShowDropdown(!showDropdown);
+  // hides dropdown when user clicks outside the select component
+  useClickAway(ref, () => {
+    setShowDropdown(false);
+  });
 
-  const updateSelectedOption = (option: string) => {
+  const showDropdownHandler = useCallback(
+    () => setShowDropdown((prevShowDropdown) => !prevShowDropdown),
+    []
+  );
+
+  const updateSelectedOption = useCallback((option: string) => {
     setSelectedOption(option);
     setShowDropdown(false);
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ selectedOption, changeSelectedOption: updateSelectedOption }),
+    [selectedOption, updateSelectedOption]
+  );
 
   return (
-    <SelectContext.Provider
-      value={{ selectedOption, changeSelectedOption: updateSelectedOption }}
-    >
-      <Container>
+    <SelectContext.Provider value={value}>
+      <Container ref={ref}>
         {label && <Label>{label}</Label>}
         <SelectedOption
           onClick={showDropdownHandler}
           selectedOption={selectedOption}
           disabled={disabled}
           errorMessage={errorMessage}
+          aria-expanded={showDropdown}
         >
           <LeftContainer>
             {iconSrc && <OptionalIcon src={iconSrc} />}
@@ -152,11 +176,13 @@ export function Select({
             showDropdown={showDropdown}
           />
         </SelectedOption>
-        {hint && !errorMessage && <Hint>{hint}</Hint>}
+        {hint && !showDropdown && !errorMessage && <Hint>{hint}</Hint>}
         {errorMessage && !showDropdown && !disabled && (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
-        <List showDropdown={showDropdown}>{children}</List>
+        <List showDropdown={showDropdown} role="listbox" tabIndex={-1}>
+          {children}
+        </List>
       </Container>
     </SelectContext.Provider>
   );

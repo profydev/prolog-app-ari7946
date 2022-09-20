@@ -8,7 +8,9 @@ type OptionProps = {
   value: string;
 };
 
-const ListItem = styled.li<{ isCurrentlySelected: boolean }>`
+const ListItem = styled.li.attrs(() => ({
+  tabIndex: 0,
+}))<{ isCurrentlySelected: boolean }>`
   margin: 0;
   padding: 0;
   display: flex;
@@ -44,7 +46,9 @@ export function Option({ children, value }: OptionProps) {
   return (
     <ListItem
       isCurrentlySelected={isCurrentlySelected}
+      aria-selected={isCurrentlySelected}
       onClick={() => changeSelectedOption(value)}
+      role="option"
     >
       {children}
       <ListItemIcon

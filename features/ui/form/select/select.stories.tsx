@@ -40,7 +40,7 @@ Default.args = {
   iconSrc: "./icons/person-select.svg",
   label: "Team member",
   hint: "This is a hint text to help user.",
-  errorMessage: "This is an error message.",
+  errorMessage: "",
 };
 Default.parameters = {
   viewMode: "docs",
