@@ -37,6 +37,10 @@ export const Default = Template.bind({});
 Default.args = {
   disabled: false,
   placeholder: "Select team member",
+  iconSrc: "./icons/person-select.svg",
+  label: "Team member",
+  hint: "This is a hint text to help user.",
+  errorMessage: "This is an error message.",
 };
 Default.parameters = {
   viewMode: "docs",

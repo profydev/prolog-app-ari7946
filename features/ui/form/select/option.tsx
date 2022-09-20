@@ -35,7 +35,6 @@ const ListItemIcon = styled.img<{ isCurrentlySelected: boolean }>`
   padding: ${space(0)};
   width: ${space(4)};
   height: ${space(4)};
-  /* padding-bottom: ${space(3)}; */
 `;
 
 export function Option({ children, value }: OptionProps) {
