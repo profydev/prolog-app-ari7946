@@ -4,13 +4,9 @@ import axios from "axios";
 import type { Page } from "@typings/page.types";
 import type { Issue } from "../types/issue.types";
 import { useFilters } from "@features/issues";
+import { IssueFilters } from "@features/issues";
 
-type Filters = {
-  status?: null | "open" | "resolved";
-  level?: null | "error" | "warning" | "info";
-};
-
-async function getIssues(page: number, filters: Filters) {
+async function getIssues(page: number, filters: IssueFilters) {
   const { data } = await axios.get(
     `https://prolog-api.profy.dev/issue?page=${page}`,
     { params: filters }

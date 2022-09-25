@@ -2,11 +2,12 @@ import React, { ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { useSelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
+import capitalize from "lodash/capitalize";
 
 type OptionProps = {
   children: ReactNode | ReactNode[];
   value: any;
-  handleCallback?: (value: string) => unknown;
+  handleCallback?: (value: any) => unknown;
 };
 
 const ListItem = styled.li.attrs(() => ({
@@ -49,7 +50,7 @@ export function Option({ children, value, handleCallback }: OptionProps) {
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
       onClick={() => {
-        changeSelectedOption(value);
+        changeSelectedOption(capitalize(value));
         if (handleCallback) {
           handleCallback(value);
         }

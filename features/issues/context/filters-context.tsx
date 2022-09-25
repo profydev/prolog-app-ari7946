@@ -5,19 +5,20 @@ import React, {
   createContext,
   ReactNode,
 } from "react";
+import { IssueFilters } from "@features/issues";
 
-type Filters = {
-  status?: null | "open" | "resolved";
-  level?: null | "error" | "warning" | "info";
-};
+// type Filters = {
+//   status?: null | "open" | "resolved";
+//   level?: null | "error" | "warning" | "info";
+// };
 
 export const FiltersContext = createContext<{
-  filters: Filters;
-  handleFilters: (level: null | string) => unknown;
+  filters: IssueFilters;
+  handleFilters: (filter: IssueFilters) => unknown;
 }>({
-  filters: { status: null, level: null },
+  filters: { status: undefined, level: undefined },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  handleFilters: (level: string | null) => {},
+  handleFilters: (filter: IssueFilters) => {},
 });
 
 type FiltersProviderProps = {
@@ -25,13 +26,13 @@ type FiltersProviderProps = {
 };
 
 export function FiltersProvider({ children }: FiltersProviderProps) {
-  const [filters, setFilters] = useState<Filters>({
-    status: null,
-    level: null,
+  const [filters, setFilters] = useState<IssueFilters>({
+    status: undefined,
+    level: undefined,
   });
 
   const handleFilters = useCallback(
-    (level) => setFilters((prevFilters) => ({ ...prevFilters, level })),
+    (filter) => setFilters((prevFilters) => ({ ...prevFilters, ...filter })),
     []
   );
 
