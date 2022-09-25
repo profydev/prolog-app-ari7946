@@ -5,7 +5,8 @@ import { color, textFont, space } from "@styles/theme";
 
 type OptionProps = {
   children: ReactNode | ReactNode[];
-  value: string;
+  value: any;
+  handleCallback?: (value: string) => unknown;
 };
 
 const ListItem = styled.li.attrs(() => ({
@@ -39,7 +40,7 @@ const ListItemIcon = styled.img<{ isCurrentlySelected: boolean }>`
   height: ${space(4)};
 `;
 
-export function Option({ children, value }: OptionProps) {
+export function Option({ children, value, handleCallback }: OptionProps) {
   const { changeSelectedOption, selectedOption } = useSelectContext();
   const isCurrentlySelected = selectedOption === value;
 
@@ -47,13 +48,18 @@ export function Option({ children, value }: OptionProps) {
     <ListItem
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
-      onClick={() => changeSelectedOption(value)}
+      onClick={() => {
+        changeSelectedOption(value);
+        if (handleCallback) {
+          handleCallback(value);
+        }
+      }}
       role="option"
     >
       {children}
       <ListItemIcon
         isCurrentlySelected={isCurrentlySelected}
-        src="./icons/select-checked-sm.svg"
+        src="/icons/select-checked-sm.svg"
       />
     </ListItem>
   );

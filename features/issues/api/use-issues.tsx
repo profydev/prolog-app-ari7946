@@ -3,26 +3,25 @@ import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import type { Page } from "@typings/page.types";
 import type { Issue } from "../types/issue.types";
+import { useFilters } from "@features/issues";
+
+type Filters = {
+  status?: null | "open" | "resolved";
+  level?: null | "error" | "warning" | "info";
+};
 
 async function getIssues(page: number, filters: Filters) {
   const { data } = await axios.get(
     `https://prolog-api.profy.dev/issue?page=${page}`,
     { params: filters }
   );
-  console.log("data", data);
   return data;
 }
 
-type Filters = {
-  status: null | "open" | "resolved";
-  level: null | "error" | "warning" | "info";
-};
-
 export function useIssues(page: number) {
-  const [filters, setFilters] = useState<Filters>({
-    status: "open",
-    level: null,
-  });
+  const { filters } = useFilters();
+
+  useEffect(() => console.log("update filters!"), [filters]);
 
   const query = useQuery<Page<Issue>, Error>(
     ["issues", page, filters],

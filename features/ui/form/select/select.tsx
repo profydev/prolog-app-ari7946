@@ -41,6 +41,8 @@ const List = styled.ul<{ showDropdown: boolean }>`
           position: absolute;
           height: auto;
           z-index: 200;
+          background-color: #fff;
+          margin-top: ${space(1)};
         `
       : css`
           opacity: 0;
@@ -172,7 +174,7 @@ export function Select({
           </LeftContainer>
 
           <SelectArrowIcon
-            src="./icons/select-icon.svg"
+            src={"/icons/select-icon.svg"}
             showDropdown={showDropdown}
           />
         </SelectedOption>
