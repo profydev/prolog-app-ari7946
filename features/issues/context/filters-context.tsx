@@ -35,8 +35,13 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
     []
   );
 
+  const memoizedValue = useMemo(
+    () => ({ filters, handleFilters }),
+    [filters, handleFilters]
+  );
+
   return (
-    <FiltersContext.Provider value={{ filters, handleFilters }}>
+    <FiltersContext.Provider value={memoizedValue}>
       {children}
     </FiltersContext.Provider>
   );
