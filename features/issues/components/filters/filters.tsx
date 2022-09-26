@@ -6,6 +6,7 @@ import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
 const Container = styled.div`
   padding-bottom: 2rem;
   display: flex;
+  gap: 3rem;
   justify-content: flex-end;
 `;
 
@@ -26,7 +27,7 @@ export function Filters() {
 
   return (
     <Container>
-      <Select placeholder="Status" defaultValue="Status">
+      <Select placeholder="Status" defaultValue="Status" width="8rem">
         <Option value={undefined} handleCallback={handleStatus}>
           --None--
         </Option>
@@ -38,7 +39,7 @@ export function Filters() {
         </Option>
       </Select>
 
-      <Select placeholder="Level" defaultValue="Level">
+      <Select placeholder="Level" defaultValue="Level" width="8rem">
         <Option value={undefined} handleCallback={handleLevel}>
           --None--
         </Option>
@@ -57,6 +58,8 @@ export function Filters() {
         handleChange={handleChange}
         value={inputValue}
         label="project name"
+        placeholder="Project Name"
+        iconSrc="/icons/search-icon.svg"
       />
     </Container>
   );

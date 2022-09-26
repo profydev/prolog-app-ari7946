@@ -15,6 +15,7 @@ const ListItem = styled.li.attrs(() => ({
   margin: 0;
   padding: 0;
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   list-style-type: none;
@@ -24,6 +25,7 @@ const ListItem = styled.li.attrs(() => ({
   cursor: pointer;
   z-index: 100;
   color: ${color("gray", 800)};
+  background-color: #fff;
 
   ${({ isCurrentlySelected }) =>
     isCurrentlySelected &&

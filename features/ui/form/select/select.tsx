@@ -17,17 +17,21 @@ type SelectProps = {
   placeholder?: string;
   disabled?: boolean;
   iconSrc?: string;
+  width?: string | number;
   label?: string;
   hint?: string;
 };
 
-const Container = styled.div`
+const Container = styled.div<{ width: number | string }>`
   position: relative;
+  display: block;
+  width: ${({ width }) => width || `calc(${space(20)} * 4)`};
+  background-color: #fff;
 `;
 
 const List = styled.ul<{ showDropdown: boolean }>`
   display: block;
-  width: calc(${space(20)} * 4);
+  width: 100%;
   margin: 0;
   padding: 0;
   position: absolute;
@@ -41,7 +45,6 @@ const List = styled.ul<{ showDropdown: boolean }>`
           position: absolute;
           height: auto;
           z-index: 200;
-          background-color: #fff;
           margin-top: ${space(1)};
         `
       : css`
@@ -58,7 +61,7 @@ const SelectedOption = styled.div.attrs(() => ({
   border-color: ${({ disabled, errorMessage }) =>
     !disabled && errorMessage ? color("error", 300) : color("gray", 300)};
   border-radius: 7px;
-  width: calc(${space(20)} * 4 - ${space(6)});
+  width: ${({ width }) => width || `calc(${space(20)} * 4 - ${space(6)})`};
   padding: ${space(2, 3)};
   color: ${({ selectedOption }) =>
     selectedOption ? color("gray", 900) : color("gray", 500)};
@@ -131,6 +134,7 @@ export function Select({
   label = "",
   hint = "",
   errorMessage = "",
+  width = "",
   children,
 }: SelectProps) {
   const [selectedOption, setSelectedOption] = useState(defaultValue || "");
@@ -159,7 +163,7 @@ export function Select({
 
   return (
     <SelectContext.Provider value={value}>
-      <Container ref={ref}>
+      <Container ref={ref} width={width}>
         {label && <Label>{label}</Label>}
         <SelectedOption
           onClick={showDropdownHandler}
@@ -167,6 +171,7 @@ export function Select({
           disabled={disabled}
           errorMessage={errorMessage}
           aria-expanded={showDropdown}
+          width={width}
         >
           <LeftContainer>
             {iconSrc && <OptionalIcon src={iconSrc} />}
