@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { useSelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
-import capitalize from "lodash/capitalize";
 
 type OptionProps = {
   children: ReactNode | ReactNode[];
@@ -50,9 +49,13 @@ export function Option({ children, value, handleCallback }: OptionProps) {
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
       onClick={() => {
-        changeSelectedOption(capitalize(value));
+        changeSelectedOption(value === "Open" ? "Unresolved" : value);
         if (handleCallback) {
-          handleCallback(value);
+          if (value) {
+            handleCallback(value.toLowerCase());
+          } else {
+            handleCallback(value);
+          }
         }
       }}
       role="option"

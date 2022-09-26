@@ -5,6 +5,7 @@ import { ProjectLanguage, useProjects } from "@features/projects";
 import { color, space, textFont } from "@styles/theme";
 import { IssueRow } from "./Issue-row";
 import { Filters } from "../filters";
+import { useFilters } from "@features/issues";
 
 const Container = styled.div`
   background: white;
@@ -65,6 +66,7 @@ const PageNumber = styled.span`
 export function IssueList() {
   const router = useRouter();
   const page = Number(router.query.page || 1);
+  const { inputValue } = useFilters();
   const navigateToPage = (newPage: number) =>
     router.push({
       pathname: router.pathname,
@@ -95,6 +97,15 @@ export function IssueList() {
     }),
     {} as Record<string, ProjectLanguage>
   );
+
+  const projectIdToName = (projects.data || []).reduce(
+    (prev, project) => ({
+      ...prev,
+      [project.id]: project.name,
+    }),
+    {} as Record<string, string>
+  );
+
   const { items, meta } = issuesPage.data || {};
 
   return (
@@ -111,13 +122,22 @@ export function IssueList() {
             </HeaderRow>
           </thead>
           <tbody>
-            {(items || []).map((issue) => (
-              <IssueRow
-                key={issue.id}
-                issue={issue}
-                projectLanguage={projectIdToLanguage[issue.projectId]}
-              />
-            ))}
+            {(items || [])
+              .filter(
+                (issue) =>
+                  inputValue === "" ||
+                  projectIdToName[issue.projectId]
+                    .toLowerCase()
+                    .includes(inputValue.toLowerCase())
+              )
+              .map((issue) => (
+                <IssueRow
+                  key={issue.id}
+                  issue={issue}
+                  projectLanguage={projectIdToLanguage[issue.projectId]}
+                  projectName={projectIdToName[issue.projectId]}
+                />
+              ))}
           </tbody>
         </Table>
         <PaginationContainer>

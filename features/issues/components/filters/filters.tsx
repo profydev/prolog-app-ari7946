@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Select, Option } from "@features/ui";
+import { Select, Option, Input } from "@features/ui";
 import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
 
 const Container = styled.div`
@@ -10,7 +10,11 @@ const Container = styled.div`
 `;
 
 export function Filters() {
-  const { handleFilters } = useFilters();
+  const { handleFilters, inputValue, setInputValue } = useFilters();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
   const handleLevel = (level: IssueLevel) => {
     handleFilters({ level });
@@ -23,31 +27,37 @@ export function Filters() {
   return (
     <Container>
       <Select placeholder="Status" defaultValue="Status">
-        <Option value={null} handleCallback={handleLevel}>
+        <Option value={undefined} handleCallback={handleStatus}>
           --None--
         </Option>
-        <Option value="error" handleCallback={handleLevel}>
+        <Option value="Open" handleCallback={handleStatus}>
+          Unresolved
+        </Option>
+        <Option value="Resolved" handleCallback={handleStatus}>
+          Resolved
+        </Option>
+      </Select>
+
+      <Select placeholder="Level" defaultValue="Level">
+        <Option value={undefined} handleCallback={handleLevel}>
+          --None--
+        </Option>
+        <Option value="Error" handleCallback={handleLevel}>
           Error
         </Option>
-        <Option value="warning" handleCallback={handleLevel}>
+        <Option value="Warning" handleCallback={handleLevel}>
           Warning
         </Option>
-        <Option value="info" handleCallback={handleLevel}>
+        <Option value="Info" handleCallback={handleLevel}>
           Info
         </Option>
       </Select>
 
-      <Select placeholder="Status" defaultValue="Status">
-        <Option value={null} handleCallback={handleStatus}>
-          --None--
-        </Option>
-        <Option value="open" handleCallback={handleStatus}>
-          Unresolved
-        </Option>
-        <Option value="resolved" handleCallback={handleStatus}>
-          Resolved
-        </Option>
-      </Select>
+      <Input
+        handleChange={handleChange}
+        value={inputValue}
+        label="project name"
+      />
     </Container>
   );
 }
