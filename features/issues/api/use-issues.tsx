@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import type { Page } from "@typings/page.types";
@@ -17,7 +17,10 @@ async function getIssues(page: number, filters: IssueFilters) {
 export function useIssues(page: number) {
   const { filters } = useFilters();
 
-  useEffect(() => console.log("update filters!"), [filters]);
+  useEffect(
+    () => console.log("update filters!"),
+    [filters.level, filters.project, filters.status]
+  );
 
   const query = useQuery<Page<Issue>, Error>(
     ["issues", page, filters],
