@@ -43,7 +43,7 @@ const InputContainer = styled.input<{
     `}
 
   ::placeholder {
-    color: ${color("gray", 300)};
+    color: ${color("gray", 400)};
   }
 
   &:focus {

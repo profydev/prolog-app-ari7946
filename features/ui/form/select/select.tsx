@@ -165,6 +165,7 @@ export function Select({
     <SelectContext.Provider value={value}>
       <Container ref={ref} width={width}>
         {label && <Label>{label}</Label>}
+
         <SelectedOption
           onClick={showDropdownHandler}
           selectedOption={selectedOption}
@@ -183,10 +184,13 @@ export function Select({
             showDropdown={showDropdown}
           />
         </SelectedOption>
+
         {hint && !showDropdown && !errorMessage && <Hint>{hint}</Hint>}
+
         {errorMessage && !showDropdown && !disabled && (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
+
         <List showDropdown={showDropdown} role="listbox" tabIndex={-1}>
           {children}
         </List>

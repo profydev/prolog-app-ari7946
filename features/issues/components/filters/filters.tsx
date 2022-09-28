@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Select, Option, Input } from "@features/ui";
 import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
@@ -11,7 +11,10 @@ const Container = styled.div`
 `;
 
 export function Filters() {
-  const { handleFilters, inputValue, setInputValue } = useFilters();
+  const { handleFilters } = useFilters();
+  const [inputValue, setInputValue] = useState("");
+  const [projectName, setProjectName] = useState<string | undefined>(undefined);
+  const projectNames = ["backend", "frontend - web", "ml service"];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -24,6 +27,25 @@ export function Filters() {
   const handleStatus = (status: IssueStatus) => {
     handleFilters({ status });
   };
+
+  const handleProjectName = useCallback(
+    (projectName) => handleFilters({ project: projectName }),
+    [handleFilters]
+  );
+
+  useEffect(() => {
+    if (inputValue.length < 2) {
+      setProjectName(undefined);
+      handleProjectName(undefined);
+      return;
+    }
+    const name = projectNames.find(
+      (name) => inputValue.length > 2 && name.includes(inputValue)
+    );
+
+    setProjectName((prevName) => name || prevName);
+    handleProjectName(projectName);
+  }, [inputValue]);
 
   return (
     <Container>

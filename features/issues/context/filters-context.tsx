@@ -10,15 +10,10 @@ import { IssueFilters } from "@features/issues";
 export const FiltersContext = createContext<{
   filters: IssueFilters;
   handleFilters: (filter: IssueFilters) => unknown;
-  inputValue: string;
-  setInputValue: (val: string) => void;
 }>({
-  filters: { status: undefined, level: undefined },
+  filters: { status: undefined, level: undefined, project: undefined },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   handleFilters: (_filter: IssueFilters) => {},
-  inputValue: "",
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setInputValue: () => {},
 });
 
 type FiltersProviderProps = {
@@ -26,11 +21,10 @@ type FiltersProviderProps = {
 };
 
 export function FiltersProvider({ children }: FiltersProviderProps) {
-  const [inputValue, setInputValue] = useState<string>("");
-
   const [filters, setFilters] = useState<IssueFilters>({
     status: undefined,
     level: undefined,
+    project: undefined,
   });
 
   const handleFilters = useCallback(
@@ -39,10 +33,10 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
   );
 
   const memoizedValue = useMemo(
-    () => ({ filters, handleFilters, inputValue, setInputValue }),
-    [filters, handleFilters, inputValue, setInputValue]
+    () => ({ filters, handleFilters }),
+    [filters, handleFilters]
   );
-  console.log("val", inputValue);
+
   return (
     <FiltersContext.Provider value={memoizedValue}>
       {children}

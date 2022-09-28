@@ -17,8 +17,9 @@ export type Issue = {
   stack: string;
   level: IssueLevel;
   status: IssueStatus;
+  project?: string;
   numEvents: number;
   numUsers: number;
 };
 
-export type IssueFilters = Partial<Pick<Issue, "level" | "status">>;
+export type IssueFilters = Partial<Pick<Issue, "level" | "status" | "project">>;
