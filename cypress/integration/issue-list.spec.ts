@@ -129,7 +129,7 @@ describe("Issue List", () => {
       cy.validateIssues(mockIssuesByBackendProject);
     });
 
-    it.only("renders issues with backend project level AND warning level only", () => {
+    it("renders issues with backend project level AND warning level only, clear input for project name and change the status level", () => {
       // get the filter by 'partial' project name's input
       cy.dataCy("filter-by-project").within(() => {
         cy.get("input")
