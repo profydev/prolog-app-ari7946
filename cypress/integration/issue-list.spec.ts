@@ -28,6 +28,7 @@ describe("Issue List", () => {
     // wait for request to resolve
     cy.wait("@getProjects");
     cy.wait("@getIssues");
+    cy.wait(2000);
 
     // set button aliases
     cy.get("button").contains("Previous").as("prev-button");
@@ -100,12 +101,64 @@ describe("Issue List", () => {
         });
     });
 
-    it.only("renders issues with resolved status only", () => {
+    it("renders issues with resolved status only", () => {
       cy.dataCy("filter-by-status").click();
       cy.wait(2000);
       cy.contains("Resolved").click();
       cy.wait(3000);
       cy.validateIssues(mockIssuesByResolvedStatus);
+    });
+
+    it("renders issues with error level only", () => {
+      cy.dataCy("filter-by-level").click();
+      cy.wait(2000);
+      cy.contains("Error").click();
+      cy.wait(3000);
+      cy.validateIssues(mockIssuesByErrorLevel);
+    });
+
+    it("renders issues with backend project level only", () => {
+      cy.dataCy("filter-by-project")
+        .within(() =>
+          cy.get("input").should("have.attr", "placeholder", "Project Name")
+        )
+        .as("filter-input");
+
+      cy.get("@filter-input").type("back");
+      cy.wait(1000);
+      cy.validateIssues(mockIssuesByBackendProject);
+    });
+
+    it.only("renders issues with backend project level AND warning level only", () => {
+      // get the filter by 'partial' project name's input
+      cy.dataCy("filter-by-project").within(() => {
+        cy.get("input")
+          .should("have.attr", "placeholder", "Project Name")
+          .as("filter-input");
+      });
+
+      // type 'back', which is partial for "backend"
+      cy.get("@filter-input").type("back");
+      cy.dataCy("filter-by-level").click();
+
+      // set level to warning
+      cy.contains("Warning").click();
+      cy.wait(2000);
+
+      // check that issues are filtered by both backend project and their level set to warning
+      cy.validateIssues(mockIssuesByBackendProjectAndWarningLevel);
+
+      // clear input field, projects should now not be filtered by any project name
+      cy.get("@filter-input").clear();
+      cy.wait(1000);
+
+      // change level to Error, with project name input filed empty
+      cy.dataCy("filter-by-level").click();
+      cy.contains("Error").click();
+      cy.wait(1000);
+
+      // check that issues are only filtered by error level and not project name, because the input field has been cleared
+      cy.validateIssues(mockIssuesByErrorLevel);
     });
   });
 });

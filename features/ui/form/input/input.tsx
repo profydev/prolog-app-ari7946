@@ -120,12 +120,13 @@ export function Input({
   hint = "",
   error = false,
   errorMessage = "",
+  ...props
 }: InputProps) {
   const isIconPresent = iconSrc.length > 3;
 
   return (
     <>
-      <Container>
+      <Container {...props}>
         <Label htmlFor={label} displayLabel={displayLabel}>
           {label}
         </Label>
