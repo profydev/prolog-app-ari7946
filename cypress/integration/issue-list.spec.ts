@@ -1,6 +1,10 @@
 import mockIssues1 from "../fixtures/issues-page-1.json";
 import mockIssues2 from "../fixtures/issues-page-2.json";
 import mockIssues3 from "../fixtures/issues-page-3.json";
+import mockIssuesByResolvedStatus from "../fixtures/issues-resolved.json";
+import mockIssuesByErrorLevel from "../fixtures/issues-error.json";
+import mockIssuesByBackendProject from "../fixtures/issues-backend.json";
+import mockIssuesByBackendProjectAndWarningLevel from "../fixtures/issues-backend-and-warning.json";
 
 describe("Issue List", () => {
   beforeEach(() => {
@@ -26,7 +30,7 @@ describe("Issue List", () => {
     cy.wait("@getIssues");
 
     // set button aliases
-    cy.get("button", { timeout: 10000 }).contains("Previous").as("prev-button");
+    cy.get("button").contains("Previous").as("prev-button");
     cy.get("button").contains("Next").as("next-button");
   });
 
@@ -94,6 +98,14 @@ describe("Issue List", () => {
             }
           });
         });
+    });
+
+    it.only("renders issues with resolved status only", () => {
+      cy.dataCy("filter-by-status").click();
+      cy.wait(2000);
+      cy.contains("Resolved").click();
+      cy.wait(3000);
+      cy.validateIssues(mockIssuesByResolvedStatus);
     });
   });
 });

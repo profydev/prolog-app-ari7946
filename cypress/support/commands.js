@@ -23,3 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("validateIssues", (mockedIssues) => {
+  cy.get("main")
+    .find("tbody")
+    .find("tr")
+    .each(($el, index) => {
+      const issue = mockedIssues.items[index];
+      const firstLineOfStackTrace = issue.stack.split("\n")[1].trim();
+
+      cy.wrap($el).contains(issue.name);
+      cy.wrap($el).contains(issue.message);
+      cy.wrap($el).contains(issue.numEvents);
+      cy.wrap($el).contains(firstLineOfStackTrace);
+    });
+});
+
+Cypress.Commands.add("dataCy", (value) => {
+  return cy.get(`[data-cy=${value}]`);
+});

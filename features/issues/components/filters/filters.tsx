@@ -51,7 +51,12 @@ export function Filters() {
 
   return (
     <Container>
-      <Select placeholder="Status" defaultValue="Status" width="8rem">
+      <Select
+        placeholder="Status"
+        defaultValue="Status"
+        width="8rem"
+        data-cy="filter-by-status"
+      >
         <Option value={undefined} handleCallback={handleStatus}>
           --None--
         </Option>
@@ -63,7 +68,12 @@ export function Filters() {
         </Option>
       </Select>
 
-      <Select placeholder="Level" defaultValue="Level" width="8rem">
+      <Select
+        placeholder="Level"
+        defaultValue="Level"
+        width="8rem"
+        data-cy="filter-by-level"
+      >
         <Option value={undefined} handleCallback={handleLevel}>
           --None--
         </Option>
@@ -84,6 +94,7 @@ export function Filters() {
         label="project name"
         placeholder="Project Name"
         iconSrc="/icons/search-icon.svg"
+        data-cy="filter-by-project"
       />
     </Container>
   );

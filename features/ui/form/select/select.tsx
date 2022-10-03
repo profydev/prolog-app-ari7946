@@ -136,6 +136,7 @@ export function Select({
   errorMessage = "",
   width = "",
   children,
+  ...props
 }: SelectProps) {
   const [selectedOption, setSelectedOption] = useState(defaultValue || "");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -163,7 +164,7 @@ export function Select({
 
   return (
     <SelectContext.Provider value={value}>
-      <Container ref={ref} width={width}>
+      <Container {...props} ref={ref} width={width}>
         {label && <Label>{label}</Label>}
 
         <SelectedOption
