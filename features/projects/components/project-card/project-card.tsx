@@ -139,6 +139,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <BottomContainer>
         <Button
           color={ButtonColor.empty}
+          data-cy={`view-issues-${name.toLowerCase()}`}
           onClick={() => {
             router.push(
               {
