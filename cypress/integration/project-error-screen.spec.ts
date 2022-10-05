@@ -40,7 +40,6 @@ describe("Project Error Screen", () => {
         cy.wrap($el).contains(mockProjects[index].numIssues);
         cy.wrap($el).contains(mockProjects[index].numEvents24h);
         cy.wrap($el).contains(capitalize(statusText[index]));
-        cy.wrap($el).find("a").should("have.attr", "href", "/dashboard/issues");
       });
   });
 });
