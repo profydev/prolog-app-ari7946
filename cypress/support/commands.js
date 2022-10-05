@@ -30,7 +30,7 @@ Cypress.Commands.add("validateIssues", (mockedIssues) => {
     .each(($el, index) => {
       const issue = mockedIssues.items[index];
       const firstLineOfStackTrace = issue.stack.split("\n")[1].trim();
-
+      console.log("issue", issue);
       cy.wrap($el).contains(issue.name);
       cy.wrap($el).contains(issue.message);
       cy.wrap($el).contains(issue.numEvents);
