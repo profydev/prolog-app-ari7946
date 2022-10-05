@@ -30,7 +30,6 @@ export function useIssues(page: number) {
       staleTime: 60000,
     }
   );
-
   // Prefetch the next page!
   const queryClient = useQueryClient();
   useEffect(() => {

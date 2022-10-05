@@ -1,5 +1,8 @@
 import capitalize from "lodash/capitalize";
 import mockProjects from "../fixtures/projects.json";
+import mockIssuesByBackendProject from "../fixtures/issues-backend.json";
+import mockIssues1 from "../fixtures/issues-page-1.json";
+import mockIssuesByBackendProjectAndWarningLevel from "../fixtures/issues-backend-and-warning.json";
 
 describe("Project List", () => {
   beforeEach(() => {
@@ -34,9 +37,6 @@ describe("Project List", () => {
           cy.wrap($el).contains(mockProjects[index].numIssues);
           cy.wrap($el).contains(mockProjects[index].numEvents24h);
           cy.wrap($el).contains(capitalize(statusText[index]));
-          cy.wrap($el)
-            .find("a")
-            .should("have.attr", "href", "/dashboard/issues");
         });
     });
 
@@ -47,6 +47,25 @@ describe("Project List", () => {
       cy.get("footer").find("a").contains("Community").should("exist");
 
       cy.get("footer").find("img[alt='Profy logo']").should("exist");
+    });
+
+    it.only("input field should be preset with correct project name and issues should only pertain to that project", () => {
+      // click on View issues button for the backend project card
+      cy.dataCy("view-issues-backend")
+        .should("exist")
+        .click()
+        .then(() => {
+          // get the the input field and assign it an alias
+          cy.dataCy("filter-by-project").within(() => {
+            cy.get("input").as("filter-input");
+          });
+        });
+      // verify that the input field has preset value of 'backend'
+      cy.get("@filter-input").should("have.value", "backend");
+      cy.wait(1000);
+
+      // veryify that all issues are related to the backend project only
+      cy.validateIssues(mockIssuesByBackendProject);
     });
   });
 });
