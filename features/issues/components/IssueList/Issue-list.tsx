@@ -121,22 +121,14 @@ export function IssueList() {
             </HeaderRow>
           </thead>
           <tbody>
-            {(items || [])
-              // .filter(
-              //   (issue) =>
-              //     inputValue === "" ||
-              //     projectIdToName[issue.projectId]
-              //       .toLowerCase()
-              //       .includes(inputValue.toLowerCase())
-              // )
-              .map((issue) => (
-                <IssueRow
-                  key={issue.id}
-                  issue={issue}
-                  projectLanguage={projectIdToLanguage[issue.projectId]}
-                  projectName={projectIdToName[issue.projectId]}
-                />
-              ))}
+            {(items || []).map((issue) => (
+              <IssueRow
+                key={issue.id}
+                issue={issue}
+                projectLanguage={projectIdToLanguage[issue.projectId]}
+                projectName={projectIdToName[issue.projectId]}
+              />
+            ))}
           </tbody>
         </Table>
         <PaginationContainer>
