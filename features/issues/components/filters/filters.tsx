@@ -14,19 +14,28 @@ const Container = styled.div`
 `;
 
 export function Filters() {
-  const router = useRouter();
   const { handleFilters } = useFilters();
   const { data: projects } = useProjects();
   const [inputValue, setInputValue] = useState<string>("");
+  const router = useRouter();
   const routerQueryProjectName =
     (router.query.projectName as string)?.toLowerCase() || undefined;
-  const [projectName, setProjectName] = useState<string | undefined>(
-    routerQueryProjectName || undefined
-  );
   const projectNames = projects?.map((project) => project.name.toLowerCase());
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleChange = (input: string) => {
+    setInputValue((prevInput) => (prevInput === input ? prevInput : input));
+
+    if (inputValue?.length < 2) {
+      handleProjectName(undefined);
+    }
+
+    const name = projectNames?.find(
+      (name) =>
+        inputValue?.length > 2 &&
+        name?.toLowerCase().includes(inputValue.toLowerCase())
+    );
+
+    if (name) handleProjectName(inputValue?.toLowerCase());
   };
 
   const handleLevel = (level?: string) => {
@@ -48,32 +57,13 @@ export function Filters() {
 
   const handleProjectName = useCallback(
     (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
-    [handleFilters, routerQueryProjectName]
+    [handleFilters]
   );
 
   useEffect(() => {
-    if (inputValue?.length < 2) {
-      setProjectName(undefined);
-      handleProjectName(undefined);
-      return;
-    }
-    const name = projectNames?.find(
-      (name) =>
-        inputValue?.length > 2 &&
-        name?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-
-    setProjectName(
-      (prevName) => name?.toLowerCase() || prevName?.toLowerCase()
-    );
-    handleProjectName(projectName?.toLowerCase());
-  }, [inputValue?.toLowerCase()]);
-
-  useEffect(() => {
     handleProjectName(routerQueryProjectName);
-    setProjectName(routerQueryProjectName?.toLowerCase());
-    setInputValue(routerQueryProjectName?.toLowerCase() as string);
-  }, [routerQueryProjectName]);
+    setInputValue(routerQueryProjectName || "");
+  }, [routerQueryProjectName, handleProjectName]);
 
   return (
     <Container>
