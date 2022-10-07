@@ -15,7 +15,7 @@ const Container = styled.div`
 
 export function Filters() {
   const router = useRouter();
-  const { handleFilters, filters } = useFilters();
+  const { handleFilters } = useFilters();
   const { data: projects } = useProjects();
   const [inputValue, setInputValue] = useState<string>("");
   const routerQueryProjectName =
@@ -29,12 +29,21 @@ export function Filters() {
     setInputValue(e.target.value);
   };
 
-  const handleLevel = (level: IssueLevel) => {
-    handleFilters({ level });
+  const handleLevel = (level?: string) => {
+    if (level) {
+      level = level.toLowerCase();
+    }
+    handleFilters({ level: level as IssueLevel });
   };
 
-  const handleStatus = (status: IssueStatus) => {
-    handleFilters({ status });
+  const handleStatus = (status?: string) => {
+    if (status === "Unresolved") {
+      status = "open";
+    }
+    if (status) {
+      status = status.toLowerCase();
+    }
+    handleFilters({ status: status as IssueStatus });
   };
 
   const handleProjectName = useCallback(
@@ -77,7 +86,7 @@ export function Filters() {
         <Option value={undefined} handleCallback={handleStatus}>
           --None--
         </Option>
-        <Option value="Open" handleCallback={handleStatus}>
+        <Option value="Unresolved" handleCallback={handleStatus}>
           Unresolved
         </Option>
         <Option value="Resolved" handleCallback={handleStatus}>
