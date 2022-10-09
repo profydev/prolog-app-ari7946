@@ -1,7 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { Select, Option, Input } from "@features/ui";
-import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
+import {
+  useFilters,
+  IssueLevel,
+  IssueStatus,
+  IssueFilters,
+} from "@features/issues";
 import { useProjects } from "@features/projects";
 
 import { useRouter } from "next/router";
@@ -14,16 +19,17 @@ const Container = styled.div`
 `;
 
 export function Filters() {
-  const { handleFilters } = useFilters();
+  const { handleFilters, filters } = useFilters();
   const { data: projects } = useProjects();
-  const [inputValue, setInputValue] = useState<string>("");
   const router = useRouter();
   const routerQueryProjectName =
     (router.query.projectName as string)?.toLowerCase() || undefined;
+  const [inputValue, setInputValue] = useState<string>("");
   const projectNames = projects?.map((project) => project.name.toLowerCase());
+  const isFirst = useRef(true);
 
   const handleChange = (input: string) => {
-    setInputValue((prevInput) => (prevInput === input ? prevInput : input));
+    setInputValue(input);
 
     if (inputValue?.length < 2) {
       handleProjectName(undefined);
@@ -35,7 +41,9 @@ export function Filters() {
         name?.toLowerCase().includes(inputValue.toLowerCase())
     );
 
-    if (name) handleProjectName(inputValue?.toLowerCase());
+    if (name) {
+      handleProjectName(name);
+    }
   };
 
   const handleLevel = (level?: string) => {
@@ -61,9 +69,29 @@ export function Filters() {
   );
 
   useEffect(() => {
-    handleProjectName(routerQueryProjectName);
-    setInputValue(routerQueryProjectName || "");
-  }, [routerQueryProjectName, handleProjectName]);
+    const newObj: { [key: string]: string } = {
+      ...filters,
+    };
+
+    Object.keys(newObj).forEach((key) => {
+      if (newObj[key] === undefined) {
+        delete newObj[key];
+      }
+    });
+
+    const url = {
+      pathname: router.pathname,
+      query: { ...newObj },
+    };
+
+    if (routerQueryProjectName && isFirst) {
+      handleProjectName(routerQueryProjectName);
+      setInputValue(routerQueryProjectName || "");
+      isFirst.current = false;
+    }
+
+    router.push(url, undefined, { shallow: true });
+  }, [filters.level, filters.status, filters.project]);
 
   return (
     <Container>
