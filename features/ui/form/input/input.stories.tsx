@@ -12,8 +12,8 @@ export default {
 
 const Template: ComponentStory<typeof Input> = (props) => {
   const [value, setValue] = useState<string>("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const handleChange = (input: string) => {
+    setValue(input);
   };
 
   return (

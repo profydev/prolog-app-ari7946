@@ -8,6 +8,7 @@ import type { Issue } from "../../types/issue.types";
 
 type IssueRowProps = {
   projectLanguage: ProjectLanguage;
+  projectName: string;
   issue: Issue;
 };
 
@@ -47,7 +48,11 @@ const ErrorType = styled.span`
   ${textFont("sm", "medium")}
 `;
 
-export function IssueRow({ projectLanguage, issue }: IssueRowProps) {
+export function IssueRow({
+  projectLanguage,
+  projectName,
+  issue,
+}: IssueRowProps) {
   const { name, message, stack, level, numEvents, numUsers } = issue;
   const firstLineOfStackTrace = stack.split("\n")[1];
 
@@ -60,7 +65,9 @@ export function IssueRow({ projectLanguage, issue }: IssueRowProps) {
         />
         <div>
           <ErrorTypeAndMessage>
-            <ErrorType>{name}:&nbsp;</ErrorType>
+            <ErrorType>
+              ({projectName}) {name}:&nbsp;
+            </ErrorType>
             {message}
           </ErrorTypeAndMessage>
           <div>{firstLineOfStackTrace}</div>

@@ -4,6 +4,11 @@ export enum IssueLevel {
   error = "error",
 }
 
+export enum IssueStatus {
+  resolved = "resolved",
+  open = "open",
+}
+
 export type Issue = {
   id: string;
   projectId: string;
@@ -11,6 +16,10 @@ export type Issue = {
   message: string;
   stack: string;
   level: IssueLevel;
+  status: IssueStatus;
+  project?: string;
   numEvents: number;
   numUsers: number;
 };
+
+export type IssueFilters = Partial<Pick<Issue, "level" | "status" | "project">>;

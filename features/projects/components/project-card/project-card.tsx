@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styled from "styled-components";
 import capitalize from "lodash/capitalize";
 import { Badge, BadgeColor } from "@features/ui";
@@ -8,7 +7,9 @@ import {
   ProjectStatus,
 } from "../../types/project.types";
 import { color, displayFont, space, textFont } from "@styles/theme";
-import { Routes } from "@config/routes";
+import { Button, ButtonColor } from "@features/ui";
+
+import { useRouter } from "next/router";
 
 type ProjectCardProps = {
   project: Project;
@@ -105,13 +106,10 @@ const Status = styled.div`
   flex: 1;
 `;
 
-const ViewIssuesAnchor = styled.a`
-  text-decoration: none;
-  ${textFont("sm", "medium")}
-`;
-
 export function ProjectCard({ project }: ProjectCardProps) {
   const { name, language, numIssues, numEvents24h, status } = project;
+  const router = useRouter();
+
   return (
     <Container>
       <TopContainer>
@@ -139,9 +137,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </InfoContainer>
       </TopContainer>
       <BottomContainer>
-        <Link href={Routes.issues} passHref>
-          <ViewIssuesAnchor>View issues</ViewIssuesAnchor>
-        </Link>
+        <Button
+          color={ButtonColor.empty}
+          data-cy={`view-issues-${name.toLowerCase()}`}
+          onClick={() => {
+            router.push(
+              {
+                pathname: "dashboard/issues",
+                query: { projectName: name },
+              },
+              "dashboard/issues"
+            );
+          }}
+        >
+          View issues
+        </Button>
       </BottomContainer>
     </Container>
   );

@@ -5,7 +5,7 @@ import { color, textFont, space } from "@styles/theme";
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   value: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (input: string) => unknown;
   disabled?: boolean;
   displayLabel?: boolean;
   iconSrc?: string;
@@ -43,7 +43,7 @@ const InputContainer = styled.input<{
     `}
 
   ::placeholder {
-    color: ${color("gray", 300)};
+    color: ${color("gray", 400)};
   }
 
   &:focus {
@@ -120,12 +120,13 @@ export function Input({
   hint = "",
   error = false,
   errorMessage = "",
+  ...props
 }: InputProps) {
   const isIconPresent = iconSrc.length > 3;
 
   return (
     <>
-      <Container>
+      <Container {...props}>
         <Label htmlFor={label} displayLabel={displayLabel}>
           {label}
         </Label>
@@ -144,7 +145,10 @@ export function Input({
 
         <InputContainer
           type="input"
-          onChange={(e) => handleChange(e)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            handleChange(e.target.value);
+          }}
           disabled={disabled}
           value={value}
           isIconPresent={isIconPresent}
