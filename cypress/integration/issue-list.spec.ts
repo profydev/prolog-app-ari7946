@@ -79,14 +79,6 @@ describe("Issue List", () => {
       cy.get("tbody tr:first").contains(mockIssues2.items[0].message);
     });
 
-    it("persists page after reload", () => {
-      cy.get("@next-button").click();
-      cy.contains("Page 2 of 3");
-
-      cy.reload();
-      cy.contains("Page 2 of 3");
-    });
-
     it("number of events and users should not be the same", () => {
       cy.get("main")
         .find("tbody")
@@ -149,7 +141,7 @@ describe("Issue List", () => {
       cy.validateIssues(mockIssuesByBackendProjectAndWarningLevel);
 
       // clear input field, projects should now not be filtered by any project name
-      cy.get("@filter-input").clear();
+      cy.get("@filter-input").clear().type("fr");
       cy.wait(1000);
 
       // change level to Error, with project name input filed empty
@@ -159,6 +151,45 @@ describe("Issue List", () => {
 
       // check that issues are only filtered by error level and not project name, because the input field has been cleared
       cy.validateIssues(mockIssuesByErrorLevel);
+    });
+
+    it("should update URL with the correct project filters/url parameters", () => {
+      // Click select component
+      cy.dataCy("filter-by-status").click();
+      // Select Resolved
+      cy.contains("Resolved").click();
+      cy.url().should("include", "/dashboard/issues?page=1&status=resolved");
+      cy.dataCy("filter-by-level").click();
+
+      // Error query param is added to the URL
+      cy.contains("Error").click();
+      cy.url().should(
+        "include",
+        "/dashboard/issues?page=1&status=resolved&level=error"
+      );
+
+      cy.dataCy("filter-by-status").click();
+      // Removes status filter
+      cy.contains("--None--").click();
+      cy.url().should("include", "/dashboard/issues?page=1&level=error");
+      cy.dataCy("filter-by-level").click();
+      cy.contains("Warning").click();
+      cy.url().should("include", "/issues?page=1&level=warning");
+
+      cy.dataCy("filter-by-project").within(() => {
+        cy.get("input").type("Back");
+      });
+      cy.url().should(
+        "include",
+        "/issues?page=1&level=warning&project=backend"
+      );
+
+      // Adds page 2 too the url
+      cy.get("@next-button").click();
+      cy.url().should(
+        "include",
+        "/issues?page=2&level=warning&project=backend"
+      );
     });
   });
 });

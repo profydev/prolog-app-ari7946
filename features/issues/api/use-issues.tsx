@@ -5,7 +5,6 @@ import type { Page } from "@typings/page.types";
 import type { Issue } from "../types/issue.types";
 import { useFilters } from "@features/issues";
 import { IssueFilters } from "@features/issues";
-import { useRouter } from "next/router";
 
 async function getIssues(page: number, filters: IssueFilters) {
   const { data } = await axios.get(
@@ -16,23 +15,7 @@ async function getIssues(page: number, filters: IssueFilters) {
 }
 
 export function useIssues(page: number) {
-  const router = useRouter();
   const { filters } = useFilters();
-
-  const newObj = { ...filters };
-
-  // Object.keys(newObj).forEach(key => {
-  // if (newObj[key] === undefined) {
-  //   delete newObj[key];
-  // }
-  // });
-
-  // router.push({
-  //   pathname: "/dashboard/[level]",
-  //   query: {
-  //     ...filters,
-  //   },
-  // });
 
   const query = useQuery<Page<Issue>, Error>(
     ["issues", page, filters],

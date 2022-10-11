@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { Select, Option, Input } from "@features/ui";
-import {
-  useFilters,
-  IssueLevel,
-  IssueStatus,
-  IssueFilters,
-} from "@features/issues";
+import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
 import { useProjects } from "@features/projects";
 
 import { useRouter } from "next/router";
@@ -33,12 +28,11 @@ export function Filters() {
 
     if (inputValue?.length < 2) {
       handleProjectName(undefined);
+      return;
     }
 
-    const name = projectNames?.find(
-      (name) =>
-        inputValue?.length > 2 &&
-        name?.toLowerCase().includes(inputValue.toLowerCase())
+    const name = projectNames?.find((name) =>
+      name?.toLowerCase().includes(inputValue.toLowerCase())
     );
 
     if (name) {
@@ -81,7 +75,10 @@ export function Filters() {
 
     const url = {
       pathname: router.pathname,
-      query: { ...newObj },
+      query: {
+        page: router.query.page || 1,
+        ...newObj,
+      },
     };
 
     if (routerQueryProjectName && isFirst) {
@@ -90,8 +87,8 @@ export function Filters() {
       isFirst.current = false;
     }
 
-    router.push(url, undefined, { shallow: true });
-  }, [filters.level, filters.status, filters.project]);
+    router.push(url, undefined, { shallow: false });
+  }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>

@@ -145,9 +145,10 @@ export function Input({
 
         <InputContainer
           type="input"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange(e.target.value)
-          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            handleChange(e.target.value);
+          }}
           disabled={disabled}
           value={value}
           isIconPresent={isIconPresent}
