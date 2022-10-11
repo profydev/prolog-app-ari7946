@@ -5,7 +5,7 @@ import { color, textFont, space } from "@styles/theme";
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   value: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (input: string) => unknown;
   disabled?: boolean;
   displayLabel?: boolean;
   iconSrc?: string;
@@ -145,7 +145,10 @@ export function Input({
 
         <InputContainer
           type="input"
-          onChange={(e) => handleChange(e)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            handleChange(e.target.value);
+          }}
           disabled={disabled}
           value={value}
           isIconPresent={isIconPresent}

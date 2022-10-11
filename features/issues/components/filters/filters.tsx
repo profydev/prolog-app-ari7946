@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { Select, Option, Input } from "@features/ui";
 import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
@@ -14,57 +14,81 @@ const Container = styled.div`
 `;
 
 export function Filters() {
-  const router = useRouter();
   const { handleFilters, filters } = useFilters();
   const { data: projects } = useProjects();
-  const [inputValue, setInputValue] = useState<string>("");
+  const router = useRouter();
   const routerQueryProjectName =
     (router.query.projectName as string)?.toLowerCase() || undefined;
-  const [projectName, setProjectName] = useState<string | undefined>(
-    routerQueryProjectName || undefined
-  );
+  const [inputValue, setInputValue] = useState<string>("");
   const projectNames = projects?.map((project) => project.name.toLowerCase());
+  const isFirst = useRef(true);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleChange = (input: string) => {
+    setInputValue(input);
+
+    if (inputValue?.length < 2) {
+      handleProjectName(undefined);
+      return;
+    }
+
+    const name = projectNames?.find((name) =>
+      name?.toLowerCase().includes(inputValue.toLowerCase())
+    );
+
+    if (name) {
+      handleProjectName(name);
+    }
   };
 
-  const handleLevel = (level: IssueLevel) => {
-    handleFilters({ level });
+  const handleLevel = (level?: string) => {
+    if (level) {
+      level = level.toLowerCase();
+    }
+    handleFilters({ level: level as IssueLevel });
   };
 
-  const handleStatus = (status: IssueStatus) => {
-    handleFilters({ status });
+  const handleStatus = (status?: string) => {
+    if (status === "Unresolved") {
+      status = "open";
+    }
+    if (status) {
+      status = status.toLowerCase();
+    }
+    handleFilters({ status: status as IssueStatus });
   };
 
   const handleProjectName = useCallback(
     (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
-    [handleFilters, routerQueryProjectName]
+    [handleFilters]
   );
 
   useEffect(() => {
-    if (inputValue?.length < 2) {
-      setProjectName(undefined);
-      handleProjectName(undefined);
-      return;
+    const newObj: { [key: string]: string } = {
+      ...filters,
+    };
+
+    Object.keys(newObj).forEach((key) => {
+      if (newObj[key] === undefined) {
+        delete newObj[key];
+      }
+    });
+
+    const url = {
+      pathname: router.pathname,
+      query: {
+        page: router.query.page || 1,
+        ...newObj,
+      },
+    };
+
+    if (routerQueryProjectName && isFirst) {
+      handleProjectName(routerQueryProjectName);
+      setInputValue(routerQueryProjectName || "");
+      isFirst.current = false;
     }
-    const name = projectNames?.find(
-      (name) =>
-        inputValue?.length > 2 &&
-        name?.toLowerCase().includes(inputValue.toLowerCase())
-    );
 
-    setProjectName(
-      (prevName) => name?.toLowerCase() || prevName?.toLowerCase()
-    );
-    handleProjectName(projectName?.toLowerCase());
-  }, [inputValue?.toLowerCase()]);
-
-  useEffect(() => {
-    handleProjectName(routerQueryProjectName);
-    setProjectName(routerQueryProjectName?.toLowerCase());
-    setInputValue(routerQueryProjectName?.toLowerCase() as string);
-  }, [routerQueryProjectName]);
+    router.push(url, undefined, { shallow: false });
+  }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>
@@ -77,7 +101,7 @@ export function Filters() {
         <Option value={undefined} handleCallback={handleStatus}>
           --None--
         </Option>
-        <Option value="Open" handleCallback={handleStatus}>
+        <Option value="Unresolved" handleCallback={handleStatus}>
           Unresolved
         </Option>
         <Option value="Resolved" handleCallback={handleStatus}>

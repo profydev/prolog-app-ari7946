@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, ReactText } from "react";
 import styled, { css } from "styled-components";
 import { useSelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
@@ -51,13 +51,9 @@ export function Option({ children, value, handleCallback }: OptionProps) {
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
       onClick={() => {
-        changeSelectedOption(value === "Open" ? "Unresolved" : value);
+        changeSelectedOption(value);
         if (handleCallback) {
-          if (value) {
-            handleCallback(value.toLowerCase());
-          } else {
-            handleCallback(value);
-          }
+          handleCallback(value);
         }
       }}
       role="option"

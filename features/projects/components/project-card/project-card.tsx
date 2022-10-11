@@ -144,7 +144,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             router.push(
               {
                 pathname: "dashboard/issues",
-                query: { projectName: name.toLowerCase() },
+                query: { projectName: name },
               },
               "dashboard/issues"
             );

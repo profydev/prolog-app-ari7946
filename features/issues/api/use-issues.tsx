@@ -17,11 +17,6 @@ async function getIssues(page: number, filters: IssueFilters) {
 export function useIssues(page: number) {
   const { filters } = useFilters();
 
-  useEffect(
-    () => console.log("update filters!"),
-    [filters.level, filters.project, filters.status]
-  );
-
   const query = useQuery<Page<Issue>, Error>(
     ["issues", page, filters],
     () => getIssues(page, filters),
