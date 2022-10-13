@@ -1,16 +1,52 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from "react";
 import styled from "styled-components";
-import { Select, Option, Input } from "@features/ui";
+import {
+  Select,
+  Option,
+  Input,
+  Button,
+  IconOptions,
+  NavigationContext,
+} from "@features/ui";
 import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
 import { useProjects } from "@features/projects";
+import { breakpoint } from "@styles/theme";
+import { useWindowSize } from "react-use";
 
 import { useRouter } from "next/router";
 
 const Container = styled.div`
-  padding-bottom: 2rem;
   display: flex;
-  gap: 3rem;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
+  margin-block: 1rem;
+  width: 100%;
+  @media (min-width: ${breakpoint("desktop")}) {
+    flex-direction: row;
+    justify-content: space-between;
+    order: initial;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+`;
+
+const RightContainer = styled.div`
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  order: -1;
+  @media (min-width: ${breakpoint("desktop")}) {
+    flex-direction: row;
+    gap: 3rem;
+    order: initial;
+  }
 `;
 
 export function Filters() {
@@ -22,6 +58,9 @@ export function Filters() {
   const [inputValue, setInputValue] = useState<string>("");
   const projectNames = projects?.map((project) => project.name.toLowerCase());
   const isFirst = useRef(true);
+  const { width } = useWindowSize();
+  const isMobileScreen = width <= 1023;
+  const { isMobileMenuOpen } = useContext(NavigationContext);
 
   const handleChange = (input: string) => {
     setInputValue(input);
@@ -92,51 +131,81 @@ export function Filters() {
 
   return (
     <Container>
-      <Select
-        placeholder="Status"
-        defaultValue="Status"
-        width="8rem"
-        data-cy="filter-by-status"
+      <Button
+        iconSrc="/icons/select-icon-white.svg"
+        iconOptions={IconOptions.leading}
+        style={{
+          height: "2.5rem",
+          minWidth: "8rem",
+          ...(isMobileScreen && { width: "100%" }),
+        }}
       >
-        <Option value={undefined} handleCallback={handleStatus}>
-          --None--
-        </Option>
-        <Option value="Unresolved" handleCallback={handleStatus}>
-          Unresolved
-        </Option>
-        <Option value="Resolved" handleCallback={handleStatus}>
-          Resolved
-        </Option>
-      </Select>
+        Resolve selected issues
+      </Button>
 
-      <Select
-        placeholder="Level"
-        defaultValue="Level"
-        width="8rem"
-        data-cy="filter-by-level"
-      >
-        <Option value={undefined} handleCallback={handleLevel}>
-          --None--
-        </Option>
-        <Option value="Error" handleCallback={handleLevel}>
-          Error
-        </Option>
-        <Option value="Warning" handleCallback={handleLevel}>
-          Warning
-        </Option>
-        <Option value="Info" handleCallback={handleLevel}>
-          Info
-        </Option>
-      </Select>
+      <RightContainer>
+        <Select
+          placeholder="Status"
+          defaultValue="Status"
+          width={isMobileScreen ? "97%" : "8rem"}
+          data-cy="filter-by-status"
+          style={{
+            ...(isMobileMenuOpen && {
+              opacity: 0,
+            }),
+          }}
+        >
+          <Option value={undefined} handleCallback={handleStatus}>
+            --None--
+          </Option>
+          <Option value="Unresolved" handleCallback={handleStatus}>
+            Unresolved
+          </Option>
+          <Option value="Resolved" handleCallback={handleStatus}>
+            Resolved
+          </Option>
+        </Select>
 
-      <Input
-        handleChange={handleChange}
-        value={inputValue}
-        label="project name"
-        placeholder="Project Name"
-        iconSrc="/icons/search-icon.svg"
-        data-cy="filter-by-project"
-      />
+        <Select
+          placeholder="Level"
+          defaultValue="Level"
+          width={isMobileScreen ? "97%" : "8rem"}
+          data-cy="filter-by-level"
+          style={{
+            ...(isMobileMenuOpen && {
+              opacity: 0,
+            }),
+          }}
+        >
+          <Option value={undefined} handleCallback={handleLevel}>
+            --None--
+          </Option>
+          <Option value="Error" handleCallback={handleLevel}>
+            Error
+          </Option>
+          <Option value="Warning" handleCallback={handleLevel}>
+            Warning
+          </Option>
+          <Option value="Info" handleCallback={handleLevel}>
+            Info
+          </Option>
+        </Select>
+
+        <Input
+          handleChange={handleChange}
+          value={inputValue}
+          label="project name"
+          placeholder="Project Name"
+          iconSrc="/icons/search-icon.svg"
+          data-cy="filter-by-project"
+          style={{
+            ...(isMobileScreen && { width: "94%", marginRight: "3rem" }),
+            ...(isMobileMenuOpen && {
+              opacity: 0,
+            }),
+          }}
+        />
+      </RightContainer>
     </Container>
   );
 }
