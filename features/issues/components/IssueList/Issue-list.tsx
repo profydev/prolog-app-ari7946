@@ -2,18 +2,28 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useIssues } from "@features/issues";
 import { ProjectLanguage, useProjects } from "@features/projects";
-import { color, space, textFont } from "@styles/theme";
+import { color, space, textFont, breakpoint } from "@styles/theme";
 import { IssueRow } from "./Issue-row";
 import { Filters } from "../filters";
+import { useWindowSize } from "react-use";
+import { IssueCard } from "./issue-card";
 
 const Container = styled.div`
+  width: 100%;
+`;
+
+const BottomContainer = styled.div`
   background: white;
-  border: 1px solid ${color("gray", 200)};
+  border: none;
   box-sizing: border-box;
-  box-shadow: 0px 4px 8px -2px rgba(16, 24, 40, 0.1),
-    0px 2px 4px -2px rgba(16, 24, 40, 0.06);
-  border-radius: ${space(2)};
   overflow: hidden;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    box-shadow: 0px 4px 8px -2px rgba(16, 24, 40, 0.1),
+      0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+    border-radius: ${space(2)};
+    border: 1px solid ${color("gray", 200)};
+  }
 `;
 
 const Table = styled.table`
@@ -65,7 +75,8 @@ const PageNumber = styled.span`
 export function IssueList() {
   const router = useRouter();
   const page = Number(router.query.page || 1);
-  // const { inputValue } = useFilters();
+  const { width } = useWindowSize();
+  const isMobileScreen = width <= 1023;
   const navigateToPage = (newPage: number) =>
     router.push({
       pathname: router.pathname,
@@ -108,29 +119,40 @@ export function IssueList() {
   const { items, meta } = issuesPage.data || {};
 
   return (
-    <>
+    <Container>
       <Filters />
-      <Container>
-        <Table>
-          <thead>
-            <HeaderRow>
-              <HeaderCell>Issue</HeaderCell>
-              <HeaderCell>Level</HeaderCell>
-              <HeaderCell>Events</HeaderCell>
-              <HeaderCell>Users</HeaderCell>
-            </HeaderRow>
-          </thead>
-          <tbody>
-            {(items || []).map((issue) => (
-              <IssueRow
-                key={issue.id}
-                issue={issue}
-                projectLanguage={projectIdToLanguage[issue.projectId]}
-                projectName={projectIdToName[issue.projectId]}
-              />
-            ))}
-          </tbody>
-        </Table>
+      <BottomContainer>
+        {isMobileScreen ? (
+          (items || []).map((issue) => (
+            <IssueCard
+              key={issue.id}
+              issue={issue}
+              projectLanguage={projectIdToLanguage[issue.projectId]}
+              projectName={projectIdToName[issue.projectId]}
+            />
+          ))
+        ) : (
+          <Table>
+            <thead>
+              <HeaderRow>
+                <HeaderCell>Issue</HeaderCell>
+                <HeaderCell>Level</HeaderCell>
+                <HeaderCell>Events</HeaderCell>
+                <HeaderCell>Users</HeaderCell>
+              </HeaderRow>
+            </thead>
+            <tbody>
+              {(items || []).map((issue) => (
+                <IssueRow
+                  key={issue.id}
+                  issue={issue}
+                  projectLanguage={projectIdToLanguage[issue.projectId]}
+                  projectName={projectIdToName[issue.projectId]}
+                />
+              ))}
+            </tbody>
+          </Table>
+        )}
         <PaginationContainer>
           <div>
             <PaginationButton
@@ -151,7 +173,7 @@ export function IssueList() {
             <PageNumber>{meta?.totalPages}</PageNumber>
           </PageInfo>
         </PaginationContainer>
-      </Container>
-    </>
+      </BottomContainer>
+    </Container>
   );
 }
