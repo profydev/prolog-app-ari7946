@@ -136,7 +136,7 @@ export function IssueCard({
       </MiddleContainer>
 
       <BottomContainer>
-        <GraphImage src="/images/mobile-issue-graph.png" />
+        <GraphImage src="/images/mobile-issue-graph.png" alt="issues graph" />
       </BottomContainer>
     </Container>
   );

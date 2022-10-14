@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useIssues } from "@features/issues";
 import { ProjectLanguage, useProjects } from "@features/projects";
 import { color, space, textFont, breakpoint } from "@styles/theme";
+import { Button, ButtonColor } from "@features/ui";
 import { IssueRow } from "./Issue-row";
 import { Filters } from "../filters";
 import { useWindowSize } from "react-use";
@@ -123,56 +124,70 @@ export function IssueList() {
       <Filters />
       <BottomContainer>
         {isMobileScreen ? (
-          (items || []).map((issue) => (
-            <IssueCard
-              key={issue.id}
-              issue={issue}
-              projectLanguage={projectIdToLanguage[issue.projectId]}
-              projectName={projectIdToName[issue.projectId]}
-            />
-          ))
+          <>
+            {(items || []).map((issue) => (
+              <IssueCard
+                key={issue.id}
+                issue={issue}
+                projectLanguage={projectIdToLanguage[issue.projectId]}
+                projectName={projectIdToName[issue.projectId]}
+              />
+            ))}
+            <Button
+              style={{
+                width: "100%",
+                border: `1px solid gray`,
+                marginTop: "2rem",
+              }}
+              color={ButtonColor.emptyGray}
+            >
+              Load more
+            </Button>
+          </>
         ) : (
-          <Table>
-            <thead>
-              <HeaderRow>
-                <HeaderCell>Issue</HeaderCell>
-                <HeaderCell>Level</HeaderCell>
-                <HeaderCell>Events</HeaderCell>
-                <HeaderCell>Users</HeaderCell>
-              </HeaderRow>
-            </thead>
-            <tbody>
-              {(items || []).map((issue) => (
-                <IssueRow
-                  key={issue.id}
-                  issue={issue}
-                  projectLanguage={projectIdToLanguage[issue.projectId]}
-                  projectName={projectIdToName[issue.projectId]}
-                />
-              ))}
-            </tbody>
-          </Table>
+          <>
+            <Table>
+              <thead>
+                <HeaderRow>
+                  <HeaderCell>Issue</HeaderCell>
+                  <HeaderCell>Level</HeaderCell>
+                  <HeaderCell>Events</HeaderCell>
+                  <HeaderCell>Users</HeaderCell>
+                </HeaderRow>
+              </thead>
+              <tbody>
+                {(items || []).map((issue) => (
+                  <IssueRow
+                    key={issue.id}
+                    issue={issue}
+                    projectLanguage={projectIdToLanguage[issue.projectId]}
+                    projectName={projectIdToName[issue.projectId]}
+                  />
+                ))}
+              </tbody>
+            </Table>
+            <PaginationContainer>
+              <div>
+                <PaginationButton
+                  onClick={() => navigateToPage(page - 1)}
+                  disabled={page === 1}
+                >
+                  Previous
+                </PaginationButton>
+                <PaginationButton
+                  onClick={() => navigateToPage(page + 1)}
+                  disabled={page === meta?.totalPages}
+                >
+                  Next
+                </PaginationButton>
+              </div>
+              <PageInfo>
+                Page <PageNumber>{meta?.currentPage}</PageNumber> of{" "}
+                <PageNumber>{meta?.totalPages}</PageNumber>
+              </PageInfo>
+            </PaginationContainer>
+          </>
         )}
-        <PaginationContainer>
-          <div>
-            <PaginationButton
-              onClick={() => navigateToPage(page - 1)}
-              disabled={page === 1}
-            >
-              Previous
-            </PaginationButton>
-            <PaginationButton
-              onClick={() => navigateToPage(page + 1)}
-              disabled={page === meta?.totalPages}
-            >
-              Next
-            </PaginationButton>
-          </div>
-          <PageInfo>
-            Page <PageNumber>{meta?.currentPage}</PageNumber> of{" "}
-            <PageNumber>{meta?.totalPages}</PageNumber>
-          </PageInfo>
-        </PaginationContainer>
       </BottomContainer>
     </Container>
   );
