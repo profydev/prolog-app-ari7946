@@ -8,6 +8,7 @@ import mockIssuesByBackendProjectAndWarningLevel from "../fixtures/issues-backen
 
 describe("Issue List", () => {
   beforeEach(() => {
+    cy.viewport(1440, 900);
     // setup request mocks
     cy.intercept("GET", "https://prolog-api.profy.dev/project", {
       fixture: "projects.json",
@@ -37,7 +38,7 @@ describe("Issue List", () => {
 
   context("desktop resolution", () => {
     beforeEach(() => {
-      cy.viewport(1025, 900);
+      cy.viewport(1440, 900);
     });
 
     it("renders the issues", () => {
@@ -116,7 +117,7 @@ describe("Issue List", () => {
         )
         .as("filter-input");
 
-      cy.get("@filter-input").type("back");
+      cy.get("@filter-input").first().type("back");
       cy.wait(1000);
       cy.validateIssues(mockIssuesByBackendProject);
     });
