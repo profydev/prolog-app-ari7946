@@ -8,10 +8,10 @@ describe("Sidebar Navigation", () => {
       cy.viewport(1025, 900);
     });
 
-    it("links are working", () => {
+    it.only("links are working", () => {
       // check that each link leads to the correct page
       cy.get("nav").contains("Issues").click();
-      cy.url().should("eq", "http://localhost:3000/dashboard/issues");
+      cy.url().should("include", "http://localhost:3000/dashboard/issues");
 
       cy.get("nav").contains("Projects").click();
       cy.url().should("eq", "http://localhost:3000/dashboard");

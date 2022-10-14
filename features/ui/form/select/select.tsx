@@ -4,13 +4,14 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  SelectHTMLAttributes,
 } from "react";
 import styled, { css } from "styled-components";
 import { useClickAway } from "react-use";
 import { SelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
 
-type SelectProps = {
+type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   children: ReactNode | ReactNode[];
   errorMessage?: string;
   defaultValue?: string;
@@ -22,7 +23,7 @@ type SelectProps = {
   hint?: string;
 };
 
-const Container = styled.div<{ width: number | string }>`
+const Container = styled.div<any>`
   position: relative;
   display: block;
   width: ${({ width }) => width || `calc(${space(20)} * 4)`};
@@ -91,7 +92,7 @@ const SelectArrowIcon = styled.img<{
 }>`
   transform: ${({ showDropdown }) =>
     showDropdown ? "rotate(180deg)" : "none"};
-  margin-inline: ${space(1)};
+  padding-inline: ${space(1)};
 `;
 
 const OptionalIcon = styled.img`
@@ -164,7 +165,7 @@ export function Select({
 
   return (
     <SelectContext.Provider value={value}>
-      <Container {...props} ref={ref} width={width}>
+      <Container ref={ref} width={width} {...props}>
         {label && <Label>{label}</Label>}
 
         <SelectedOption
