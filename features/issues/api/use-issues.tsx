@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import type { Page } from "@typings/page.types";
@@ -11,8 +11,14 @@ async function getIssues(page: number, filters: IssueFilters) {
     `https://prolog-api.profy.dev/issue?page=${page}`,
     { params: filters }
   );
+  console.log("data", data);
   return data;
 }
+
+type Filters = {
+  status: null | "open" | "resolved";
+  level: null | "error" | "warning" | "info";
+};
 
 export function useIssues(page: number) {
   const { filters } = useFilters();
