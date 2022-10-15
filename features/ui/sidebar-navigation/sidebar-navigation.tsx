@@ -196,8 +196,13 @@ const getIconSrc = (
 
 export function SidebarNavigation() {
   const router = useRouter();
-  const { isSidebarCollapsed, toggleSidebar } = useContext(NavigationContext);
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {
+    isSidebarCollapsed,
+    toggleSidebar,
+    isMobileMenuOpen,
+    setMobileMenuOpen,
+  } = useContext(NavigationContext);
+
   const isDesktop = useIsDesktop();
 
   return (
@@ -205,7 +210,7 @@ export function SidebarNavigation() {
       <FixedContainer>
         <Header>
           <Logo src={getIconSrc(isDesktop, isSidebarCollapsed)} alt="logo" />
-          <MenuButton onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
+          <MenuButton onClick={() => setMobileMenuOpen()}>
             <MenuIcon
               src={isMobileMenuOpen ? "/icons/close.svg" : "/icons/menu.svg"}
               alt={isMobileMenuOpen ? "close menu" : "open menu"}

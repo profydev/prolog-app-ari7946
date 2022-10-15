@@ -62,7 +62,7 @@ const Container = styled.button<{
   border-radius: ${space(2)};
   letter-spacing: 0.0525rem;
   color: #fff;
-  min-height: ${space(8)};
+  height: ${space(12)};
   ${(props) =>
     props.iconOptions !== IconOptions.only && `min-width: ${space(24)}`};
   background-color: ${color("primary", 600)};

@@ -155,6 +155,7 @@ export function Input({
           placeholder={placeholder}
           errorMessage={errorMessage}
           error={error}
+          {...props}
         />
       </Container>
       {hint && !errorMessage && <Hint>{hint}</Hint>}
