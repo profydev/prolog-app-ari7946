@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { PageContainer } from "@features/ui";
 import { ProjectList } from "@features/projects";
 
-const Home: NextPage = () => {
+const Projects: NextPage = () => {
   return (
     <PageContainer
       title="Projects"
@@ -13,4 +13,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Projects;
