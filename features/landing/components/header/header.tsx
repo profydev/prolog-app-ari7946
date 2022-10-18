@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 const Container = styled.header`
   width: 90%;
-  height: 80px;
+  height: ${space(20)};
   padding: 0 2rem;
   box-sizing: border-box;
   display: flex;

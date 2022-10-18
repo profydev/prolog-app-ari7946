@@ -1,4 +1,4 @@
-import { Header } from "@features/landing";
+import { Header, Hero } from "@features/landing";
 import Head from "next/head";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -16,18 +16,22 @@ export async function getStaticProps() {
 }
 
 const Home = (props) => {
-  const { data } = useQuery(["home"], getHomePageData, {
+  const {
+    data: { meta, sections },
+  } = useQuery(["home"], getHomePageData, {
     initialData: props.data,
   });
-  console.log("data", data);
+  const [hero, socialProof, testimonials] = sections;
+
   return (
     <div>
       <Head>
-        <title>ProLog</title>
-        <meta name="description" content="Error monitoring" />
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
+      <Hero hero={hero} />
     </div>
   );
 };
