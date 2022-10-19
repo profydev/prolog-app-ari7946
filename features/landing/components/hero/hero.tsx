@@ -30,7 +30,6 @@ const Container = styled.section`
 `;
 
 const Heading = styled.h1`
-  position: inline-block;
   text-align: center;
   ${displayFont("md", "semibold")}
   font-size: calc(${space(16)} - ${space(2)});
@@ -38,7 +37,6 @@ const Heading = styled.h1`
 `;
 
 const SubHeading = styled.h2`
-  position: inline-block;
   max-width: calc(${space(24)} * 7 - ${space(6)});
   text-align: center;
   color: ${color("gray", 500)};
