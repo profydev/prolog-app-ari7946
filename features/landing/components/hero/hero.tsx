@@ -31,6 +31,7 @@ const Container = styled.section`
 
 const Heading = styled.h1`
   position: inline-block;
+  text-align: center;
   ${displayFont("md", "semibold")}
   font-size: calc(${space(16)} - ${space(2)});
   margin-top: 0;

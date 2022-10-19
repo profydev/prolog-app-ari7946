@@ -1,4 +1,4 @@
-import { Header, Hero } from "@features/landing";
+import { Header, Hero, SocialProof } from "@features/landing";
 import Head from "next/head";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -32,6 +32,7 @@ const Home = (props) => {
       </Head>
       <Header />
       <Hero hero={hero} />
+      <SocialProof socialProof={socialProof} />
     </div>
   );
 };
