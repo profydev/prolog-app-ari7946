@@ -24,7 +24,7 @@ const Home = (props) => {
   const [hero, socialProof, testimonials] = sections;
 
   return (
-    <main>
+    <>
       <Head>
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
@@ -34,7 +34,7 @@ const Home = (props) => {
       <Hero hero={hero} />
       <SocialProof socialProof={socialProof} />
       <Testimonials testimonials={testimonials} />
-    </main>
+    </>
   );
 };
 

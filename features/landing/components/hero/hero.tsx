@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { displayFont, space, color, textFont } from "@styles/theme";
+import { displayFont, space, color, textFont, breakpoint } from "@styles/theme";
 import Image from "next/image";
 
 type ImageType = {
@@ -25,15 +25,22 @@ const Container = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: calc(${space(20)} * 10.75);
+  padding-block: ${space(24)};
   background-color: ${color("gray", 50)};
+  @media (min-width: ${breakpoint("desktop")}) {
+    padding-inline: none;
+  }
 `;
 
 const Heading = styled.h1`
   text-align: center;
-  ${displayFont("md", "semibold")}
-  font-size: calc(${space(16)} - ${space(2)});
   margin-top: 0;
+  font-size: ${space(8)};
+  ${displayFont("md", "semibold")}
+  @media (min-width: ${breakpoint("desktop")}) {
+    ${displayFont("md", "semibold")}
+    font-size: calc(${space(16)} - ${space(2)});
+  }
 `;
 
 const SubHeading = styled.h2`

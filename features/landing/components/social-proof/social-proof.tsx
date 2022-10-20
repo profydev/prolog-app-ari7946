@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { displayFont, space, color, textFont } from "@styles/theme";
+import { displayFont, space, color, textFont, breakpoint } from "@styles/theme";
 
 type Company = {
   name: string;
@@ -18,12 +18,15 @@ type SocialProofProps = {
 
 const Container = styled.section`
   margin: 0 auto;
-  height: 296px;
+  padding-block: ${space(20)};
   display: grid;
   align-content: center;
   row-gap: ${space(1)};
   width: 100%;
-  background-color: ${color("gray", 50)};
+  background-color: #fff;
+  @media (min-width: ${breakpoint("desktop")}) {
+    background-color: ${color("gray", 50)};
+  }
 `;
 
 const Title = styled.h3`
@@ -40,16 +43,25 @@ const List = styled.ul`
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  height: 5rem;
   width: 90%;
   margin: 0 auto;
+  gap: 2rem;
 `;
 
 const Item = styled.li`
   display: flex;
-  gap: ${space(3)};
   color: ${color("gray", 900)};
-  ${displayFont("sm", "medium")}
+  gap: ${space(3)};
+  ${textFont("md", "semibold")}
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    ${displayFont("sm", "medium")}
+    gap: ${space(3)};
+    &:last-child {
+      display: none;
+    }
+    }
+  }
 `;
 
 export function SocialProof({
@@ -60,7 +72,7 @@ export function SocialProof({
       <Title>{title}</Title>
       <List>
         {/* slice off last company for desktop view */}
-        {companies?.slice(0, -1).map(({ name, logo }) => (
+        {companies?.map(({ name, logo }) => (
           <Item key={name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={logo} alt={name} />

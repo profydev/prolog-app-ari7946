@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { displayFont, space, color, textFont } from "@styles/theme";
+import { displayFont, space, color, textFont, breakpoint } from "@styles/theme";
 import Image from "next/image";
 
 type UserImage = {
@@ -30,18 +30,26 @@ type TestimonialsProps = {
 
 const Container = styled.section`
   width: 100%;
-  margin-block: ${space(24)};
+  margin: ${space(24)} auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: ${color("gray", 50)};
+  @media (min-width: ${breakpoint("desktop")}) {
+    background-color: #fff;
+  }
 `;
 
 const Heading = styled.h2`
   text-align: center;
-  ${displayFont("md", "semibold")}
-  font-size: calc(${space(16)} - ${space(2)});
   margin-top: 0;
+  font-size: ${space(8)};
+  ${displayFont("md", "semibold")}
+  @media (min-width: ${breakpoint("desktop")}) {
+    ${displayFont("md", "semibold")}
+    font-size: calc(${space(16)} - ${space(2)});
+  }
 `;
 
 const SubHeading = styled.h3`
@@ -58,15 +66,21 @@ const SubHeading = styled.h3`
 const CardsContainer = styled.div`
   width: 90%;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
+  justify-content: center;
+  gap: 2rem;
+  margin-inline: auto;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
 `;
 
 const Card = styled.article<{
   primary: boolean;
 }>`
-  width: 350px;
+  width: 330px;
   height: 416px;
   text-align: center;
   padding-inline: ${space(6)};
@@ -88,7 +102,7 @@ const CardText = styled.p<{
 }>`
   color: ${({ primary }) =>
     primary ? color("primary", 900) : color("gray", 900)};
-  font-size: ${space(6)};
+  font-size: ${space(5)};
   line-height: ${space(8)};
 `;
 
