@@ -8,8 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Container = styled.header`
-  width: 90%;
-  height: 80px;
+  /* width: 90%; */
+  height: ${space(20)};
   padding: 0 2rem;
   box-sizing: border-box;
   display: flex;
@@ -22,11 +22,12 @@ const Container = styled.header`
 const List = styled.ul`
   margin: 0;
   padding: 0;
-  display: flex;
   gap: ${space(6)};
   list-style-type: none;
   width: 100%;
+  display: none;
   @media (min-width: ${breakpoint("desktop")}) {
+    display: flex;
     width: calc(${space(24)} * 3);
   }
 `;
