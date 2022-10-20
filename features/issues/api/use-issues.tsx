@@ -11,8 +11,14 @@ async function getIssues(page: number, filters: IssueFilters) {
     `https://prolog-api.profy.dev/issue?page=${page}`,
     { params: filters }
   );
+  console.log("data", data);
   return data;
 }
+
+type Filters = {
+  status: null | "open" | "resolved";
+  level: null | "error" | "warning" | "info";
+};
 
 export function useIssues(page: number) {
   const { filters } = useFilters();
