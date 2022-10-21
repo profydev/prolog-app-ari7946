@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
-import { color, space, textFont } from "@styles/theme";
+import { color, space, textFont, breakpoint } from "@styles/theme";
 import { Button, ButtonColor } from "@features/ui";
 import styled from "styled-components";
 import Modal from "react-modal";
-import { useClickAway } from "react-use";
 
 // (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#contact-modal");
@@ -54,7 +53,11 @@ const ModalContent = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
-  padding-inline: ${space(6)};
+  padding-inline: 0;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    padding-inline: ${space(6)};
+  }
 `;
 
 const Title = styled.p`
@@ -85,17 +88,11 @@ const ButtonGroup = styled.div`
 
 export function ContactModal() {
   const [isModalOpen, setIsModalOPen] = useState(false);
-  const ref = useRef(null);
 
   const toggle = () => setIsModalOPen(!isModalOpen);
 
-  // hides modal when user clicks outside the modal component
-  useClickAway(ref, () => {
-    toggle();
-  });
-
   return (
-    <div id="contact-modal" ref={ref}>
+    <div id="contact-modal">
       <Modal isOpen={isModalOpen} shouldCloseOnEsc style={customStyles}>
         <ModalContent>
           <EmailIcon src="/icons/email-modal.svg" />
