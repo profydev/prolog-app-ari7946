@@ -1,4 +1,10 @@
-import { Header, Hero, SocialProof, Testimonials } from "@features/landing";
+import {
+  Header,
+  Hero,
+  SocialProof,
+  Testimonials,
+  ContactModal,
+} from "@features/landing";
 import Head from "next/head";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -24,7 +30,7 @@ const Home = (props) => {
   const [hero, socialProof, testimonials] = sections;
 
   return (
-    <>
+    <main>
       <Head>
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
@@ -34,7 +40,8 @@ const Home = (props) => {
       <Hero hero={hero} />
       <SocialProof socialProof={socialProof} />
       <Testimonials testimonials={testimonials} />
-    </>
+      <ContactModal />
+    </main>
   );
 };
 
