@@ -1,27 +1,48 @@
-import styled from "styled-components";
-import { Routes } from "@config/routes";
+import {
+  Header,
+  Hero,
+  SocialProof,
+  Testimonials,
+  ContactModal,
+} from "@features/landing";
+import Head from "next/head";
+import axios from "axios";
+import { useQuery } from "react-query";
 
-const Header = styled.header`
-  width: 100%;
-  height: 80px;
-  padding: 0 2rem;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-`;
+async function getHomePageData() {
+  const { data } = await axios.get(
+    "https://prolog-api.profy.dev/content-page/home"
+  );
+  return data;
+}
 
-const IssuesPage = () => {
+export async function getStaticProps() {
+  const data = await getHomePageData();
+  return { props: { data } };
+}
+
+const Home = (props) => {
+  const {
+    data: { meta, sections },
+  } = useQuery(["home"], getHomePageData, {
+    initialData: props.data,
+  });
+  const [hero, socialProof, testimonials] = sections;
+
   return (
-    <div>
-      <Header>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/icons/logo-large.svg" alt="Prolog logo" />
-        <a href={Routes.projects}>Dashboard</a>
-      </Header>
-    </div>
+    <main>
+      <Head>
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Header />
+      <Hero hero={hero} />
+      <SocialProof socialProof={socialProof} />
+      <Testimonials testimonials={testimonials} />
+      <ContactModal />
+    </main>
   );
 };
 
-export default IssuesPage;
+export default Home;

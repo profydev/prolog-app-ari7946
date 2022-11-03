@@ -5,6 +5,12 @@ import { color, Theme } from "./theme";
 export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   ${normalize}
   
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
   body {
     font-family: Inter, Sans-Serif;
     color: ${color("gray", 900)};
