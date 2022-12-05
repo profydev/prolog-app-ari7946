@@ -1,8 +1,6 @@
 import React, {
   useState,
   ReactNode,
-  useCallback,
-  useMemo,
   useRef,
   SelectHTMLAttributes,
 } from "react";
@@ -11,7 +9,12 @@ import { useClickAway } from "react-use";
 import { SelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
 
-type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+export type OptionType = {
+  text: string;
+  value: string;
+};
+
+type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "onChange"> & {
   children: ReactNode | ReactNode[];
   errorMessage?: string;
   defaultValue?: string;
@@ -21,6 +24,9 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   width?: string | number;
   label?: string;
   hint?: string;
+  value?: string;
+  onChange?: (value?: string) => void;
+  options: OptionType[];
 };
 
 const Container = styled.div<any>`
@@ -129,17 +135,19 @@ const ErrorMessage = styled.p`
 
 export function Select({
   placeholder = "Choose an option",
-  defaultValue = "",
-  iconSrc = "",
+  defaultValue,
+  value,
+  iconSrc,
   disabled = false,
-  label = "",
-  hint = "",
-  errorMessage = "",
-  width = "",
+  label,
+  hint,
+  errorMessage,
+  width,
   children,
+  options,
+  onChange,
   ...props
 }: SelectProps) {
-  const [selectedOption, setSelectedOption] = useState(defaultValue || "");
   const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
 
@@ -148,28 +156,28 @@ export function Select({
     setShowDropdown(false);
   });
 
-  const showDropdownHandler = useCallback(
-    () => setShowDropdown((prevShowDropdown) => !prevShowDropdown),
-    []
-  );
-
-  const updateSelectedOption = useCallback((option: string) => {
-    setSelectedOption(option);
+  const updateSelectedOption = (value: string) => {
+    if (onChange) onChange(value);
     setShowDropdown(false);
-  }, []);
+  };
 
-  const value = useMemo(
-    () => ({ selectedOption, changeSelectedOption: updateSelectedOption }),
-    [selectedOption, updateSelectedOption]
-  );
+  const selectedOption =
+    value === undefined
+      ? undefined
+      : options.find((option) => option.value === value);
 
   return (
-    <SelectContext.Provider value={value}>
+    <SelectContext.Provider
+      value={{
+        selectedValue: value || defaultValue,
+        changeSelectedValue: updateSelectedOption,
+      }}
+    >
       <Container ref={ref} width={width} {...props}>
         {label && <Label>{label}</Label>}
 
         <SelectedOption
-          onClick={showDropdownHandler}
+          onClick={() => setShowDropdown(!showDropdown)}
           selectedOption={selectedOption}
           disabled={disabled}
           errorMessage={errorMessage}
@@ -178,7 +186,7 @@ export function Select({
         >
           <LeftContainer>
             {iconSrc && <OptionalIcon src={iconSrc} />}
-            {selectedOption || placeholder}
+            {selectedOption?.text || placeholder}
           </LeftContainer>
 
           <SelectArrowIcon

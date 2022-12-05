@@ -5,6 +5,7 @@ import React, {
   useRef,
   useContext,
 } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import {
   Select,
@@ -14,12 +15,25 @@ import {
   IconOptions,
   NavigationContext,
 } from "@features/ui";
-import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
+import { useFilters } from "../../hooks";
+import { IssueLevel, IssueStatus } from "../../types/issue.types";
 import { useProjects } from "@features/projects";
 import { breakpoint } from "@styles/theme";
 import { useWindowSize } from "react-use";
+import { OptionType } from "@features/ui/form/select/select";
 
-import { useRouter } from "next/router";
+const statusOptions = [
+  { value: undefined, text: "--None--" },
+  { value: IssueStatus.open, text: "Unresolved" },
+  { value: IssueStatus.resolved, text: "Resolved" },
+] as OptionType[];
+
+const levelOptions = [
+  { value: undefined, text: "--None--" },
+  { value: IssueLevel.error, text: "Error" },
+  { value: IssueLevel.warning, text: "Warning" },
+  { value: IssueLevel.info, text: "Info" },
+] as OptionType[];
 
 const Container = styled.div`
   display: flex;
@@ -148,6 +162,7 @@ export function Filters() {
           placeholder="Status"
           defaultValue="Status"
           width={isMobileScreen ? "97%" : "8rem"}
+          options={statusOptions}
           data-cy="filter-by-status"
           style={{
             ...(isMobileMenuOpen && {
@@ -155,21 +170,18 @@ export function Filters() {
             }),
           }}
         >
-          <Option value={undefined} handleCallback={handleStatus}>
-            --None--
-          </Option>
-          <Option value="Unresolved" handleCallback={handleStatus}>
-            Unresolved
-          </Option>
-          <Option value="Resolved" handleCallback={handleStatus}>
-            Resolved
-          </Option>
+          {statusOptions.map((option) => (
+            <Option key={option.value} value={option.value}>
+              {option.text}
+            </Option>
+          ))}
         </Select>
 
         <Select
           placeholder="Level"
           defaultValue="Level"
           width={isMobileScreen ? "97%" : "8rem"}
+          options={levelOptions}
           data-cy="filter-by-level"
           style={{
             ...(isMobileMenuOpen && {
@@ -177,18 +189,11 @@ export function Filters() {
             }),
           }}
         >
-          <Option value={undefined} handleCallback={handleLevel}>
-            --None--
-          </Option>
-          <Option value="Error" handleCallback={handleLevel}>
-            Error
-          </Option>
-          <Option value="Warning" handleCallback={handleLevel}>
-            Warning
-          </Option>
-          <Option value="Info" handleCallback={handleLevel}>
-            Info
-          </Option>
+          {levelOptions.map((option) => (
+            <Option key={option.value} value={option.value}>
+              {option.text}
+            </Option>
+          ))}
         </Select>
 
         <Input
