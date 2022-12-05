@@ -94,19 +94,10 @@ export function Filters() {
   };
 
   const handleLevel = (level?: string) => {
-    if (level) {
-      level = level.toLowerCase();
-    }
     handleFilters({ level: level as IssueLevel });
   };
 
   const handleStatus = (status?: string) => {
-    if (status === "Unresolved") {
-      status = "open";
-    }
-    if (status) {
-      status = status.toLowerCase();
-    }
     handleFilters({ status: status as IssueStatus });
   };
 
@@ -160,8 +151,9 @@ export function Filters() {
       <RightContainer>
         <Select
           placeholder="Status"
-          defaultValue="Status"
           width={isMobileScreen ? "97%" : "8rem"}
+          value={filters.status}
+          onChange={handleStatus}
           options={statusOptions}
           data-cy="filter-by-status"
           style={{
@@ -179,8 +171,9 @@ export function Filters() {
 
         <Select
           placeholder="Level"
-          defaultValue="Level"
           width={isMobileScreen ? "97%" : "8rem"}
+          value={filters.level}
+          onChange={handleLevel}
           options={levelOptions}
           data-cy="filter-by-level"
           style={{
