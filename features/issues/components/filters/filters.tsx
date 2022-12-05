@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { useDebouncedCallback } from "use-debounce";
 import {
   Select,
   Option,
@@ -61,8 +62,12 @@ export function Filters() {
   const isMobileScreen = width <= 1023;
   const { isMobileMenuOpen } = useContext(NavigationContext);
 
+  const [project, setProject] = useState(filters.project);
+  const debouncedUpdateFilters = useDebouncedCallback(updateFilters, 300);
+
   const handleChange = (input: string) => {
-    updateFilters({ project: input });
+    setProject(input);
+    debouncedUpdateFilters({ project: input });
   };
 
   const handleLevel = (level?: string) => {
@@ -130,7 +135,7 @@ export function Filters() {
 
         <Input
           handleChange={handleChange}
-          value={filters.project}
+          value={project || ""}
           label="project name"
           placeholder="Project Name"
           iconSrc="/icons/search-icon.svg"
