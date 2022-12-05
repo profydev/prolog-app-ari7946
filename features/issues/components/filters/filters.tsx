@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useContext,
-} from "react";
-import { useRouter } from "next/router";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import {
   Select,
@@ -17,7 +10,6 @@ import {
 } from "@features/ui";
 import { useFilters } from "../../hooks";
 import { IssueLevel, IssueStatus } from "../../types/issue.types";
-import { useProjects } from "@features/projects";
 import { breakpoint } from "@styles/theme";
 import { useWindowSize } from "react-use";
 import { OptionType } from "@features/ui/form/select/select";
@@ -64,75 +56,22 @@ const RightContainer = styled.div`
 `;
 
 export function Filters() {
-  const { handleFilters, filters } = useFilters();
-  const { data: projects } = useProjects();
-  const router = useRouter();
-  const routerQueryProjectName =
-    (router.query.projectName as string)?.toLowerCase() || undefined;
-  const [inputValue, setInputValue] = useState<string>("");
-  const projectNames = projects?.map((project) => project.name.toLowerCase());
-  const isFirst = useRef(true);
+  const { updateFilters, filters } = useFilters();
   const { width } = useWindowSize();
   const isMobileScreen = width <= 1023;
   const { isMobileMenuOpen } = useContext(NavigationContext);
 
   const handleChange = (input: string) => {
-    setInputValue(input);
-
-    if (inputValue?.length < 2) {
-      handleProjectName(undefined);
-      return;
-    }
-
-    const name = projectNames?.find((name) =>
-      name?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-
-    if (name) {
-      handleProjectName(name);
-    }
+    updateFilters({ project: input });
   };
 
   const handleLevel = (level?: string) => {
-    handleFilters({ level: level as IssueLevel });
+    updateFilters({ level: level as IssueLevel });
   };
 
   const handleStatus = (status?: string) => {
-    handleFilters({ status: status as IssueStatus });
+    updateFilters({ status: status as IssueStatus });
   };
-
-  const handleProjectName = useCallback(
-    (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
-    [handleFilters]
-  );
-
-  useEffect(() => {
-    const newObj: { [key: string]: string } = {
-      ...filters,
-    };
-
-    Object.keys(newObj).forEach((key) => {
-      if (newObj[key] === undefined) {
-        delete newObj[key];
-      }
-    });
-
-    const url = {
-      pathname: router.pathname,
-      query: {
-        page: router.query.page || 1,
-        ...newObj,
-      },
-    };
-
-    if (routerQueryProjectName && isFirst) {
-      handleProjectName(routerQueryProjectName);
-      setInputValue(routerQueryProjectName || "");
-      isFirst.current = false;
-    }
-
-    router.push(url, undefined, { shallow: false });
-  }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>
@@ -191,7 +130,7 @@ export function Filters() {
 
         <Input
           handleChange={handleChange}
-          value={inputValue}
+          value={filters.project}
           label="project name"
           placeholder="Project Name"
           iconSrc="/icons/search-icon.svg"
