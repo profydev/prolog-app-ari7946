@@ -29,7 +29,6 @@ const InputContainer = styled.input<{
   border-color: ${({ errorMessage, error }) =>
     errorMessage || error ? color("error", 300) : color("gray", 300)};
   border-radius: 7px;
-  width: calc(${space(20)} * 4 - ${space(6)});
   padding: ${space(2, 3)};
   letter-spacing: 0.05rem;
   color: ${color("gray", 900)};

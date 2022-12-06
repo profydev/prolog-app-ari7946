@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactText } from "react";
+import React, { ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { useSelectContext } from "./selectContext";
 import { color, textFont, space } from "@styles/theme";
@@ -6,7 +6,6 @@ import { color, textFont, space } from "@styles/theme";
 type OptionProps = {
   children: ReactNode | ReactNode[];
   value: any;
-  handleCallback?: (value: any) => unknown;
 };
 
 const ListItem = styled.li.attrs(() => ({
@@ -42,20 +41,26 @@ const ListItemIcon = styled.img<{ isCurrentlySelected: boolean }>`
   height: ${space(4)};
 `;
 
-export function Option({ children, value, handleCallback }: OptionProps) {
-  const { changeSelectedOption, selectedOption } = useSelectContext();
-  const isCurrentlySelected = selectedOption === value;
+export function Option({ children, value }: OptionProps) {
+  const { changeSelectedValue, selectedValue } = useSelectContext();
+  const isCurrentlySelected = selectedValue === value;
+
+  const onClick = () => {
+    changeSelectedValue(value);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+    if (event.code === "Space") {
+      onClick();
+    }
+  };
 
   return (
     <ListItem
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
-      onClick={() => {
-        changeSelectedOption(value);
-        if (handleCallback) {
-          handleCallback(value);
-        }
-      }}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
       role="option"
     >
       {children}

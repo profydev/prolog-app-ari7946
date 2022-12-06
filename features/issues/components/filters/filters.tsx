@@ -1,25 +1,40 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useContext,
-} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useDebouncedCallback } from "use-debounce";
 import {
-  Select,
+  Select as UnstyledSelect,
   Option,
-  Input,
-  Button,
+  Button as UnstyledButton,
   IconOptions,
-  NavigationContext,
+  Input as UnstyledInput,
 } from "@features/ui";
-import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
-import { useProjects } from "@features/projects";
+import { useFilters } from "../../hooks";
+import { IssueLevel, IssueStatus } from "../../types/issue.types";
 import { breakpoint } from "@styles/theme";
-import { useWindowSize } from "react-use";
+import { OptionType } from "@features/ui/form/select/select";
 
-import { useRouter } from "next/router";
+const statusOptions = [
+  { value: undefined, text: "--None--" },
+  { value: IssueStatus.open, text: "Unresolved" },
+  { value: IssueStatus.resolved, text: "Resolved" },
+] as OptionType[];
+
+const levelOptions = [
+  { value: undefined, text: "--None--" },
+  { value: IssueLevel.error, text: "Error" },
+  { value: IssueLevel.warning, text: "Warning" },
+  { value: IssueLevel.info, text: "Info" },
+] as OptionType[];
+
+const Button = styled(UnstyledButton)`
+  height: 2.5rem;
+  min-width: 8rem;
+  width: 100%;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: auto;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -49,96 +64,42 @@ const RightContainer = styled.div`
   }
 `;
 
+const Select = styled(UnstyledSelect)`
+  width: 100%;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: 8rem;
+  }
+`;
+
+const Input = styled(UnstyledInput)`
+  width: 100%;
+  box-sizing: border-box;
+`;
+
 export function Filters() {
-  const { handleFilters, filters } = useFilters();
-  const { data: projects } = useProjects();
-  const router = useRouter();
-  const routerQueryProjectName =
-    (router.query.projectName as string)?.toLowerCase() || undefined;
-  const [inputValue, setInputValue] = useState<string>("");
-  const projectNames = projects?.map((project) => project.name.toLowerCase());
-  const isFirst = useRef(true);
-  const { width } = useWindowSize();
-  const isMobileScreen = width <= 1023;
-  const { isMobileMenuOpen } = useContext(NavigationContext);
+  const { updateFilters, filters } = useFilters();
+  const [project, setProject] = useState(filters.project);
+  const debouncedUpdateFilters = useDebouncedCallback(updateFilters, 300);
 
   const handleChange = (input: string) => {
-    setInputValue(input);
-
-    if (inputValue?.length < 2) {
-      handleProjectName(undefined);
-      return;
-    }
-
-    const name = projectNames?.find((name) =>
-      name?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-
-    if (name) {
-      handleProjectName(name);
-    }
+    setProject(input);
+    debouncedUpdateFilters({ project: input });
   };
 
   const handleLevel = (level?: string) => {
-    if (level) {
-      level = level.toLowerCase();
-    }
-    handleFilters({ level: level as IssueLevel });
+    updateFilters({ level: level as IssueLevel });
   };
 
   const handleStatus = (status?: string) => {
-    if (status === "Unresolved") {
-      status = "open";
-    }
-    if (status) {
-      status = status.toLowerCase();
-    }
-    handleFilters({ status: status as IssueStatus });
+    updateFilters({ status: status as IssueStatus });
   };
-
-  const handleProjectName = useCallback(
-    (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
-    [handleFilters]
-  );
-
-  useEffect(() => {
-    const newObj: { [key: string]: string } = {
-      ...filters,
-    };
-
-    Object.keys(newObj).forEach((key) => {
-      if (newObj[key] === undefined) {
-        delete newObj[key];
-      }
-    });
-
-    const url = {
-      pathname: router.pathname,
-      query: {
-        page: router.query.page || 1,
-        ...newObj,
-      },
-    };
-
-    if (routerQueryProjectName && isFirst) {
-      handleProjectName(routerQueryProjectName);
-      setInputValue(routerQueryProjectName || "");
-      isFirst.current = false;
-    }
-
-    router.push(url, undefined, { shallow: false });
-  }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>
       <Button
         iconSrc="/icons/select-icon-white.svg"
         iconOptions={IconOptions.leading}
-        style={{
-          height: "2.5rem",
-          minWidth: "8rem",
-          ...(isMobileScreen && { width: "100%" }),
-        }}
       >
         Resolve selected issues
       </Button>
@@ -146,64 +107,36 @@ export function Filters() {
       <RightContainer>
         <Select
           placeholder="Status"
-          defaultValue="Status"
-          width={isMobileScreen ? "97%" : "8rem"}
-          data-cy="filter-by-status"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
+          value={filters.status}
+          onChange={handleStatus}
+          options={statusOptions}
         >
-          <Option value={undefined} handleCallback={handleStatus}>
-            --None--
-          </Option>
-          <Option value="Unresolved" handleCallback={handleStatus}>
-            Unresolved
-          </Option>
-          <Option value="Resolved" handleCallback={handleStatus}>
-            Resolved
-          </Option>
+          {statusOptions.map((option) => (
+            <Option key={option.value} value={option.value}>
+              {option.text}
+            </Option>
+          ))}
         </Select>
 
         <Select
           placeholder="Level"
-          defaultValue="Level"
-          width={isMobileScreen ? "97%" : "8rem"}
-          data-cy="filter-by-level"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
+          value={filters.level}
+          onChange={handleLevel}
+          options={levelOptions}
         >
-          <Option value={undefined} handleCallback={handleLevel}>
-            --None--
-          </Option>
-          <Option value="Error" handleCallback={handleLevel}>
-            Error
-          </Option>
-          <Option value="Warning" handleCallback={handleLevel}>
-            Warning
-          </Option>
-          <Option value="Info" handleCallback={handleLevel}>
-            Info
-          </Option>
+          {levelOptions.map((option) => (
+            <Option key={option.value} value={option.value}>
+              {option.text}
+            </Option>
+          ))}
         </Select>
 
         <Input
           handleChange={handleChange}
-          value={inputValue}
+          value={project || ""}
           label="project name"
           placeholder="Project Name"
           iconSrc="/icons/search-icon.svg"
-          data-cy="filter-by-project"
-          style={{
-            ...(isMobileScreen && { width: "94%", marginRight: "3rem" }),
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         />
       </RightContainer>
     </Container>

@@ -41,7 +41,6 @@ Default.args = {
   label: "Team member",
   hint: "This is a hint text to help user.",
   errorMessage: "",
-  width: "",
 };
 Default.parameters = {
   viewMode: "docs",

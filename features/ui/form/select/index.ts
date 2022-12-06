@@ -1,3 +1,4 @@
 export { Option } from "./option";
 export { Select } from "./select";
-export { SelectContext, useSelectContext } from "./selectContext";
+export { useSelectContext } from "./selectContext";
+export type { OptionType } from "./select";
