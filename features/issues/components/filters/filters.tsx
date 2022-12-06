@@ -1,14 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDebouncedCallback } from "use-debounce";
-import {
-  Select,
-  Option,
-  Input,
-  Button,
-  IconOptions,
-  NavigationContext,
-} from "@features/ui";
+import { Select, Option, Input, Button, IconOptions } from "@features/ui";
 import { useFilters } from "../../hooks";
 import { IssueLevel, IssueStatus } from "../../types/issue.types";
 import { breakpoint } from "@styles/theme";
@@ -60,7 +53,6 @@ export function Filters() {
   const { updateFilters, filters } = useFilters();
   const { width } = useWindowSize();
   const isMobileScreen = width <= 1023;
-  const { isMobileMenuOpen } = useContext(NavigationContext);
 
   const [project, setProject] = useState(filters.project);
   const debouncedUpdateFilters = useDebouncedCallback(updateFilters, 300);
@@ -100,11 +92,6 @@ export function Filters() {
           onChange={handleStatus}
           options={statusOptions}
           data-cy="filter-by-status"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         >
           {statusOptions.map((option) => (
             <Option key={option.value} value={option.value}>
@@ -120,11 +107,6 @@ export function Filters() {
           onChange={handleLevel}
           options={levelOptions}
           data-cy="filter-by-level"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         >
           {levelOptions.map((option) => (
             <Option key={option.value} value={option.value}>
@@ -141,10 +123,7 @@ export function Filters() {
           iconSrc="/icons/search-icon.svg"
           data-cy="filter-by-project"
           style={{
-            ...(isMobileScreen && { width: "94%", marginRight: "3rem" }),
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
+            ...(isMobileScreen && { width: "100%", marginRight: "3rem" }),
           }}
         />
       </RightContainer>
