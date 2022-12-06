@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  ReactNode,
-  useRef,
-  SelectHTMLAttributes,
-} from "react";
+import React, { useState, ReactNode, useRef, HTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { useClickAway } from "react-use";
 import { SelectContext } from "./selectContext";
@@ -14,14 +9,13 @@ export type OptionType = {
   value: string;
 };
 
-type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "onChange"> & {
+type SelectProps = Omit<HTMLAttributes<HTMLDivElement>, "onChange"> & {
   children: ReactNode | ReactNode[];
   errorMessage?: string;
   defaultValue?: string;
   placeholder?: string;
   disabled?: boolean;
   iconSrc?: string;
-  width?: string | number;
   label?: string;
   hint?: string;
   value?: string;
@@ -29,16 +23,15 @@ type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "onChange"> & {
   options: OptionType[];
 };
 
-const Container = styled.div<any>`
+const Container = styled.div`
   position: relative;
   display: block;
-  width: ${({ width }) => width || `calc(${space(20)} * 4)`};
   background-color: #fff;
 `;
 
 const List = styled.ul<{ showDropdown: boolean }>`
   display: block;
-  width: 100%;
+  min-width: 100%;
   margin: 0;
   padding: 0;
   position: absolute;
@@ -63,15 +56,15 @@ const List = styled.ul<{ showDropdown: boolean }>`
 const SelectedOption = styled.div.attrs(() => ({
   tabIndex: 0,
   ariaHasPopup: "listbox",
-}))<any>`
+}))<{ disabled: boolean; hasError: boolean; isSelected: boolean }>`
+  width: 100%;
   border: 1px solid;
-  border-color: ${({ disabled, errorMessage }) =>
-    !disabled && errorMessage ? color("error", 300) : color("gray", 300)};
+  border-color: ${({ disabled, hasError }) =>
+    !disabled && hasError ? color("error", 300) : color("gray", 300)};
   border-radius: 7px;
-  width: ${({ width }) => width || `calc(${space(20)} * 4 - ${space(6)})`};
   padding: ${space(2, 3)};
-  color: ${({ selectedOption }) =>
-    selectedOption ? color("gray", 900) : color("gray", 500)};
+  color: ${({ isSelected }) =>
+    isSelected ? color("gray", 900) : color("gray", 500)};
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -80,8 +73,8 @@ const SelectedOption = styled.div.attrs(() => ({
 
   &:focus {
     outline: 3px solid;
-    outline-color: ${({ disabled, errorMessage }) =>
-      !disabled && errorMessage ? color("error", 100) : color("primary", 200)};
+    outline-color: ${({ disabled, hasError }) =>
+      !disabled && hasError ? color("error", 100) : color("primary", 200)};
   }
 
   ${({ disabled }) =>
@@ -142,7 +135,6 @@ export function Select({
   label,
   hint,
   errorMessage,
-  width,
   children,
   options,
   onChange,
@@ -173,16 +165,14 @@ export function Select({
         changeSelectedValue: updateSelectedOption,
       }}
     >
-      <Container ref={ref} width={width} {...props}>
+      <Container ref={ref} {...props}>
         {label && <Label>{label}</Label>}
 
         <SelectedOption
-          onClick={() => setShowDropdown(!showDropdown)}
-          selectedOption={selectedOption}
+          isSelected={!!selectedOption}
           disabled={disabled}
-          errorMessage={errorMessage}
+          hasError={!!errorMessage}
           aria-expanded={showDropdown}
-          width={width}
         >
           <LeftContainer>
             {iconSrc && <OptionalIcon src={iconSrc} />}

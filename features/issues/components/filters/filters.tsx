@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDebouncedCallback } from "use-debounce";
-import { Select, Option, Input, Button, IconOptions } from "@features/ui";
+import {
+  Select as UnstyledSelect,
+  Option,
+  Button as UnstyledButton,
+  IconOptions,
+  Input as UnstyledInput,
+} from "@features/ui";
 import { useFilters } from "../../hooks";
 import { IssueLevel, IssueStatus } from "../../types/issue.types";
 import { breakpoint } from "@styles/theme";
-import { useWindowSize } from "react-use";
 import { OptionType } from "@features/ui/form/select/select";
 
 const statusOptions = [
@@ -20,6 +25,16 @@ const levelOptions = [
   { value: IssueLevel.warning, text: "Warning" },
   { value: IssueLevel.info, text: "Info" },
 ] as OptionType[];
+
+const Button = styled(UnstyledButton)`
+  height: 2.5rem;
+  min-width: 8rem;
+  width: 100%;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: auto;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -49,11 +64,21 @@ const RightContainer = styled.div`
   }
 `;
 
+const Select = styled(UnstyledSelect)`
+  width: 100%;
+
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: 8rem;
+  }
+`;
+
+const Input = styled(UnstyledInput)`
+  width: 100%;
+  box-sizing: border-box;
+`;
+
 export function Filters() {
   const { updateFilters, filters } = useFilters();
-  const { width } = useWindowSize();
-  const isMobileScreen = width <= 1023;
-
   const [project, setProject] = useState(filters.project);
   const debouncedUpdateFilters = useDebouncedCallback(updateFilters, 300);
 
@@ -75,11 +100,6 @@ export function Filters() {
       <Button
         iconSrc="/icons/select-icon-white.svg"
         iconOptions={IconOptions.leading}
-        style={{
-          height: "2.5rem",
-          minWidth: "8rem",
-          ...(isMobileScreen && { width: "100%" }),
-        }}
       >
         Resolve selected issues
       </Button>
@@ -87,11 +107,9 @@ export function Filters() {
       <RightContainer>
         <Select
           placeholder="Status"
-          width={isMobileScreen ? "97%" : "8rem"}
           value={filters.status}
           onChange={handleStatus}
           options={statusOptions}
-          data-cy="filter-by-status"
         >
           {statusOptions.map((option) => (
             <Option key={option.value} value={option.value}>
@@ -102,11 +120,9 @@ export function Filters() {
 
         <Select
           placeholder="Level"
-          width={isMobileScreen ? "97%" : "8rem"}
           value={filters.level}
           onChange={handleLevel}
           options={levelOptions}
-          data-cy="filter-by-level"
         >
           {levelOptions.map((option) => (
             <Option key={option.value} value={option.value}>
@@ -121,10 +137,6 @@ export function Filters() {
           label="project name"
           placeholder="Project Name"
           iconSrc="/icons/search-icon.svg"
-          data-cy="filter-by-project"
-          style={{
-            ...(isMobileScreen && { width: "100%", marginRight: "3rem" }),
-          }}
         />
       </RightContainer>
     </Container>
