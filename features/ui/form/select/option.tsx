@@ -45,11 +45,22 @@ export function Option({ children, value }: OptionProps) {
   const { changeSelectedValue, selectedValue } = useSelectContext();
   const isCurrentlySelected = selectedValue === value;
 
+  const onClick = () => {
+    changeSelectedValue(value);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+    if (event.code === "Space") {
+      onClick();
+    }
+  };
+
   return (
     <ListItem
       isCurrentlySelected={isCurrentlySelected}
       aria-selected={isCurrentlySelected}
-      onClick={() => changeSelectedValue(value)}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
       role="option"
     >
       {children}

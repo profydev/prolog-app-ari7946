@@ -158,6 +158,16 @@ export function Select({
       ? undefined
       : options.find((option) => option.value === value);
 
+  const toggleDropDown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.code === "Space") {
+      toggleDropDown();
+    }
+  };
+
   return (
     <SelectContext.Provider
       value={{
@@ -169,6 +179,8 @@ export function Select({
         {label && <Label>{label}</Label>}
 
         <SelectedOption
+          onClick={toggleDropDown}
+          onKeyDown={onKeyDown}
           isSelected={!!selectedOption}
           disabled={disabled}
           hasError={!!errorMessage}
