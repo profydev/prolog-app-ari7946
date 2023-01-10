@@ -1,11 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useContext,
-} from "react";
+import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
+import { capitalize } from "lodash";
+
 import {
   Select,
   Option,
@@ -14,12 +10,15 @@ import {
   IconOptions,
   NavigationContext,
 } from "@features/ui";
-import { useFilters, IssueLevel, IssueStatus } from "@features/issues";
+import {
+  useFilters,
+  IssueLevel,
+  IssueStatus,
+  IssueFilters,
+} from "@features/issues";
 import { useProjects } from "@features/projects";
 import { breakpoint } from "@styles/theme";
 import { useWindowSize } from "react-use";
-
-import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: flex;
@@ -49,13 +48,30 @@ const RightContainer = styled.div`
   }
 `;
 
+const getStatusDefaultValue = (filters: IssueFilters) => {
+  if (!filters.status) {
+    return "Status";
+  }
+  if (filters.status === IssueStatus.open) {
+    return "Unresolved";
+  }
+  return "Resolved";
+};
+
+const getLevelDefaultValue = (filters: IssueFilters) => {
+  if (!filters.level) {
+    return "Level";
+  }
+  return capitalize(filters.level);
+};
+
 export function Filters() {
   const { handleFilters, filters } = useFilters();
   const { data: projects } = useProjects();
   // const router = useRouter();
   // const routerQueryProjectName =
   //   (router.query.projectName as string)?.toLowerCase() || undefined;
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState(filters.project || "");
   const projectNames = projects?.map((project) => project.name.toLowerCase());
   // const isFirst = useRef(true);
   const { width } = useWindowSize();
@@ -146,7 +162,7 @@ export function Filters() {
       <RightContainer>
         <Select
           placeholder="Status"
-          defaultValue="Status"
+          defaultValue={getStatusDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
           data-cy="filter-by-status"
           style={{
@@ -168,7 +184,7 @@ export function Filters() {
 
         <Select
           placeholder="Level"
-          defaultValue="Level"
+          defaultValue={getLevelDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
           data-cy="filter-by-level"
           style={{
