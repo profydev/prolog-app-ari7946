@@ -52,12 +52,12 @@ const RightContainer = styled.div`
 export function Filters() {
   const { handleFilters, filters } = useFilters();
   const { data: projects } = useProjects();
-  const router = useRouter();
-  const routerQueryProjectName =
-    (router.query.projectName as string)?.toLowerCase() || undefined;
+  // const router = useRouter();
+  // const routerQueryProjectName =
+  //   (router.query.projectName as string)?.toLowerCase() || undefined;
   const [inputValue, setInputValue] = useState<string>("");
   const projectNames = projects?.map((project) => project.name.toLowerCase());
-  const isFirst = useRef(true);
+  // const isFirst = useRef(true);
   const { width } = useWindowSize();
   const isMobileScreen = width <= 1023;
   const { isMobileMenuOpen } = useContext(NavigationContext);
@@ -101,33 +101,33 @@ export function Filters() {
     [handleFilters]
   );
 
-  useEffect(() => {
-    const newObj: { [key: string]: string } = {
-      ...filters,
-    };
+  // useEffect(() => {
+  //   const newObj: { [key: string]: string } = {
+  //     ...filters,
+  //   };
 
-    Object.keys(newObj).forEach((key) => {
-      if (newObj[key] === undefined) {
-        delete newObj[key];
-      }
-    });
+  //   Object.keys(newObj).forEach((key) => {
+  //     if (newObj[key] === undefined) {
+  //       delete newObj[key];
+  //     }
+  //   });
 
-    const url = {
-      pathname: router.pathname,
-      query: {
-        page: router.query.page || 1,
-        ...newObj,
-      },
-    };
+  //   const url = {
+  //     pathname: router.pathname,
+  //     query: {
+  //       page: router.query.page || 1,
+  //       ...newObj,
+  //     },
+  //   };
 
-    if (routerQueryProjectName && isFirst) {
-      handleProjectName(routerQueryProjectName);
-      setInputValue(routerQueryProjectName || "");
-      isFirst.current = false;
-    }
+  //   if (routerQueryProjectName && isFirst) {
+  //     handleProjectName(routerQueryProjectName);
+  //     setInputValue(routerQueryProjectName || "");
+  //     isFirst.current = false;
+  //   }
 
-    router.push(url, undefined, { shallow: false });
-  }, [filters.level, filters.status, filters.project, router.query.page]);
+  //   router.push(url, undefined, { shallow: false });
+  // }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>
