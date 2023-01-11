@@ -1,15 +1,8 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 
-import {
-  Select as UnstyledSelect,
-  Option,
-  Input as UnstyledInput,
-  Button,
-  IconOptions,
-  NavigationContext,
-} from "@features/ui";
+import { Select, Option, Input, Button, IconOptions } from "@features/ui";
 import {
   useFilters,
   IssueLevel,
@@ -37,14 +30,14 @@ const Container = styled.div`
   }
 `;
 
-export const Select = styled(UnstyledSelect)`
+export const FilterSelect = styled(Select)`
   width: 100%;
   @media (min-width: ${breakpoint("desktop")}) {
     width: 10rem;
   }
 `;
 
-export const Input = styled(UnstyledInput)`
+export const FilterInput = styled(Input)`
   width: 100%;
   @media (min-width: ${breakpoint("desktop")}) {
     width: 17.5rem;
@@ -125,7 +118,7 @@ export function Filters() {
       </Button>
 
       <RightContainer>
-        <Select
+        <FilterSelect
           placeholder="Status"
           defaultValue={getStatusDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
@@ -140,9 +133,9 @@ export function Filters() {
           <Option value="Resolved" handleCallback={handleStatus}>
             Resolved
           </Option>
-        </Select>
+        </FilterSelect>
 
-        <Select
+        <FilterSelect
           placeholder="Level"
           defaultValue={getLevelDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
@@ -160,9 +153,9 @@ export function Filters() {
           <Option value="Info" handleCallback={handleLevel}>
             Info
           </Option>
-        </Select>
+        </FilterSelect>
 
-        <Input
+        <FilterInput
           handleChange={handleChange}
           value={inputValue}
           label="project name"
