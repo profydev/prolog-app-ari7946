@@ -19,7 +19,7 @@ export const useFilters = () => {
   // Updates URL with router.push
   const handleFilters = (newFilters: IssueFilters) => {
     const query = { ...router.query, ...newFilters };
-    router.push({ query });
+    router.replace({ query });
   };
 
   return { filters, handleFilters };

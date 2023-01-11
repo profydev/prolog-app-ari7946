@@ -16,7 +16,8 @@ import {
   IssueStatus,
   IssueFilters,
 } from "@features/issues";
-import { useProjects } from "@features/projects";
+import { useDebouncedCallback } from "use-debounce";
+
 import { breakpoint } from "@styles/theme";
 import { useWindowSize } from "react-use";
 
@@ -67,32 +68,15 @@ const getLevelDefaultValue = (filters: IssueFilters) => {
 
 export function Filters() {
   const { handleFilters, filters } = useFilters();
-  const { data: projects } = useProjects();
-  // const router = useRouter();
-  // const routerQueryProjectName =
-  //   (router.query.projectName as string)?.toLowerCase() || undefined;
+  const debouncedHandleFilters = useDebouncedCallback(handleFilters, 300);
   const [inputValue, setInputValue] = useState(filters.project || "");
-  const projectNames = projects?.map((project) => project.name.toLowerCase());
-  // const isFirst = useRef(true);
   const { width } = useWindowSize();
   const isMobileScreen = width <= 1023;
   const { isMobileMenuOpen } = useContext(NavigationContext);
 
-  const handleChange = (input: string) => {
-    setInputValue(input);
-
-    if (inputValue?.length < 2) {
-      handleProjectName(undefined);
-      return;
-    }
-
-    const name = projectNames?.find((name) =>
-      name?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-
-    if (name) {
-      handleProjectName(name);
-    }
+  const handleChange = (project: string) => {
+    setInputValue(project);
+    debouncedHandleFilters({ project });
   };
 
   const handleLevel = (level?: string) => {
@@ -116,34 +100,6 @@ export function Filters() {
     (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
     [handleFilters]
   );
-
-  // useEffect(() => {
-  //   const newObj: { [key: string]: string } = {
-  //     ...filters,
-  //   };
-
-  //   Object.keys(newObj).forEach((key) => {
-  //     if (newObj[key] === undefined) {
-  //       delete newObj[key];
-  //     }
-  //   });
-
-  //   const url = {
-  //     pathname: router.pathname,
-  //     query: {
-  //       page: router.query.page || 1,
-  //       ...newObj,
-  //     },
-  //   };
-
-  //   if (routerQueryProjectName && isFirst) {
-  //     handleProjectName(routerQueryProjectName);
-  //     setInputValue(routerQueryProjectName || "");
-  //     isFirst.current = false;
-  //   }
-
-  //   router.push(url, undefined, { shallow: false });
-  // }, [filters.level, filters.status, filters.project, router.query.page]);
 
   return (
     <Container>
