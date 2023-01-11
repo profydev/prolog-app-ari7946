@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { capitalize } from "lodash";
 
 import {
-  Select,
+  Select as UnstyledSelect,
   Option,
-  Input,
+  Input as UnstyledInput,
   Button,
   IconOptions,
   NavigationContext,
@@ -26,13 +26,28 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-block: 1rem;
+  gap: 1rem;
   width: 100%;
   @media (min-width: ${breakpoint("desktop")}) {
     flex-direction: row;
     justify-content: space-between;
     order: initial;
-    gap: 1rem;
+    gap: 3rem;
     flex-wrap: wrap;
+  }
+`;
+
+export const Select = styled(UnstyledSelect)`
+  width: 100%;
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: 10rem;
+  }
+`;
+
+export const Input = styled(UnstyledInput)`
+  width: 100%;
+  @media (min-width: ${breakpoint("desktop")}) {
+    width: 17.5rem;
   }
 `;
 
@@ -72,7 +87,6 @@ export function Filters() {
   const [inputValue, setInputValue] = useState(filters.project || "");
   const { width } = useWindowSize();
   const isMobileScreen = width <= 1023;
-  const { isMobileMenuOpen } = useContext(NavigationContext);
 
   const handleChange = (project: string) => {
     setInputValue(project);
@@ -106,11 +120,6 @@ export function Filters() {
       <Button
         iconSrc="/icons/select-icon-white.svg"
         iconOptions={IconOptions.leading}
-        style={{
-          height: "2.5rem",
-          minWidth: "8rem",
-          ...(isMobileScreen && { width: "100%" }),
-        }}
       >
         Resolve selected issues
       </Button>
@@ -121,11 +130,6 @@ export function Filters() {
           defaultValue={getStatusDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
           data-cy="filter-by-status"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         >
           <Option value={undefined} handleCallback={handleStatus}>
             --None--
@@ -143,11 +147,6 @@ export function Filters() {
           defaultValue={getLevelDefaultValue(filters)}
           width={isMobileScreen ? "97%" : "8rem"}
           data-cy="filter-by-level"
-          style={{
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         >
           <Option value={undefined} handleCallback={handleLevel}>
             --None--
@@ -170,12 +169,6 @@ export function Filters() {
           placeholder="Project Name"
           iconSrc="/icons/search-icon.svg"
           data-cy="filter-by-project"
-          style={{
-            ...(isMobileScreen && { width: "94%", marginRight: "3rem" }),
-            ...(isMobileMenuOpen && {
-              opacity: 0,
-            }),
-          }}
         />
       </RightContainer>
     </Container>
