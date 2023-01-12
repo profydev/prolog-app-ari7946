@@ -3,7 +3,6 @@ import Head from "next/head";
 import styled from "styled-components";
 import { SidebarNavigation, Footer } from "@features/ui";
 import { color, displayFont, space, breakpoint, textFont } from "@styles/theme";
-import { FiltersProvider } from "@features/issues";
 
 type PageContainerProps = {
   children: React.ReactNode;
@@ -60,23 +59,21 @@ const Info = styled.div`
 export function PageContainer({ children, title, info }: PageContainerProps) {
   return (
     <Container>
-      <FiltersProvider>
-        <Head>
-          <title>ProLog - {title}</title>
-          <meta name="description" content="Error monitoring" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+      <Head>
+        <title>ProLog - {title}</title>
+        <meta name="description" content="Error monitoring" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <SidebarNavigation />
-        <Main>
-          <ContentContainer>
-            <Title>{title}</Title>
-            <Info>{info}</Info>
-            {children}
-          </ContentContainer>
-          <Footer />
-        </Main>
-      </FiltersProvider>
+      <SidebarNavigation />
+      <Main>
+        <ContentContainer>
+          <Title>{title}</Title>
+          <Info>{info}</Info>
+          {children}
+        </ContentContainer>
+        <Footer />
+      </Main>
     </Container>
   );
 }

@@ -6,34 +6,57 @@ import type { Issue } from "../types/issue.types";
 import { useFilters } from "@features/issues";
 import { IssueFilters } from "@features/issues";
 
-async function getIssues(page: number, filters: IssueFilters) {
-  const { data } = await axios.get(
-    `https://prolog-api.profy.dev/issue?page=${page}`,
-    { params: filters }
+export async function getIssues(
+  page: number,
+  filters: IssueFilters,
+  options?: { signal?: AbortSignal }
+) {
+  const { data } = await axios.get<Page<Issue>>(
+    "https://prolog-api.profy.dev/issue",
+    {
+      params: { page, ...filters },
+      signal: options?.signal,
+    }
   );
   return data;
 }
 
-export function useIssues(page: number) {
-  const { filters } = useFilters();
-
-  const query = useQuery<Page<Issue>, Error>(
-    ["issues", page, filters],
-    () => getIssues(page, filters),
+export async function resolveIssue(issueId: string) {
+  const { data } = await axios.patch(
+    `https://prolog-api.profy.dev/issue/${issueId}`,
     {
-      keepPreviousData: true,
-      staleTime: 60000,
+      status: "resolved",
     }
   );
+  return data;
+}
+
+const QUERY_KEY = "issues";
+
+export function getQueryKey(page?: number, filters?: IssueFilters) {
+  if (page === undefined) {
+    return [QUERY_KEY];
+  }
+  return [QUERY_KEY, page, filters];
+}
+
+export function useIssues(page: number) {
+  const { filters } = useFilters();
+  // console.log('filters', filters);
+  const query = useQuery<Page<Issue>, Error>(
+    getQueryKey(page, filters),
+    ({ signal }) => getIssues(page, filters, { signal }),
+    { keepPreviousData: true }
+  );
+
   // Prefetch the next page!
   const queryClient = useQueryClient();
   useEffect(() => {
     if (query.data?.meta.hasNextPage) {
-      queryClient.prefetchQuery(["projects", page + 1, filters], () =>
-        getIssues(page + 1, filters)
+      queryClient.prefetchQuery(getQueryKey(page + 1, filters), ({ signal }) =>
+        getIssues(page + 1, filters, { signal })
       );
     }
-  }, [query.data, page, queryClient, filters]);
-
+  }, [query.data, page, filters, queryClient]);
   return query;
 }
