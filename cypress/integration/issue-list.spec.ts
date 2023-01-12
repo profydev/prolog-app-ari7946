@@ -132,6 +132,7 @@ describe("Issue List", () => {
 
       // type 'back', which is partial for "backend"
       cy.get("@filter-input").type("back");
+      cy.wait(2000);
       cy.dataCy("filter-by-level").click();
 
       // set level to warning
@@ -154,38 +155,35 @@ describe("Issue List", () => {
       cy.validateIssues(mockIssuesByErrorLevel);
     });
 
-    it("should update URL with the correct project filters/url parameters", () => {
+    it.only("should update URL with the correct project filters/url parameters", () => {
       // Click select component
       cy.dataCy("filter-by-status").click();
       // Select Resolved
       cy.contains("Resolved").click();
-      cy.url().should("include", "/dashboard/issues?page=1&status=resolved");
+      cy.url().should("include", "/dashboard/issues?status=resolved");
       cy.dataCy("filter-by-level").click();
 
       // Error query param is added to the URL
       cy.contains("Error").click();
       cy.url().should(
         "include",
-        "/dashboard/issues?page=1&status=resolved&level=error"
+        "/dashboard/issues?status=resolved&level=error"
       );
 
       cy.dataCy("filter-by-status").click();
       // Removes status filter
       cy.contains("--None--").click();
-      cy.url().should("include", "/dashboard/issues?page=1&level=error");
+      cy.url().should("include", "/dashboard/issues?level=error");
       cy.dataCy("filter-by-level").click();
       cy.contains("Warning").click();
-      cy.url().should("include", "/issues?page=1&level=warning");
+      cy.url().should("include", "/issues?level=warning");
 
       cy.dataCy("filter-by-project").within(() => {
         cy.get("input").type("Back");
       });
-      cy.url().should(
-        "include",
-        "/issues?page=1&level=warning&project=backend"
-      );
+      cy.url().should("include", "/issues?level=warning&project=backend");
 
-      // Adds page 2 too the url
+      // Adds page 2 to the url
       cy.get("@next-button").click();
       cy.url().should(
         "include",

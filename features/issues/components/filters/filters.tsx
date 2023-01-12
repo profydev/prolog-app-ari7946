@@ -103,10 +103,10 @@ export function Filters() {
     handleFilters({ status: status as IssueStatus });
   };
 
-  const handleProjectName = useCallback(
-    (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
-    [handleFilters]
-  );
+  // const handleProjectName = useCallback(
+  //   (projectName) => handleFilters({ project: projectName?.toLowerCase() }),
+  //   [handleFilters]
+  // );
 
   return (
     <Container>
